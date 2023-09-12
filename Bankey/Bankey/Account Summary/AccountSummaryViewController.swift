@@ -12,9 +12,21 @@ class AccountSummaryViewController: UIViewController {
     var accounts: [AccountSummaryCell.ViewModel] = []
     var tableView = UITableView()
     
+    //lazy instantiation - will only be instantiated when called
+    lazy var logoutBarButtonItem: UIBarButtonItem = {
+        let barButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(logoutTapped))
+        barButtonItem.tintColor = .label
+        return barButtonItem
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+        setupNavigationBar()
+    }
+    
+    func setupNavigationBar() {
+        navigationItem.rightBarButtonItem = logoutBarButtonItem
     }
 }
 
@@ -85,7 +97,7 @@ extension AccountSummaryViewController {
                                                             accountName: "Basic Savings",
                                                         balance: 929466.23)
         let chequing = AccountSummaryCell.ViewModel(accountType: .Banking,
-                                                    accountName: "No-Fee All-In Chequing",
+                                                    accountName: "No-Fee All-In Chequing very long",
                                                     balance: 17562.44)
         let visa = AccountSummaryCell.ViewModel(accountType: .CreditCard,
                                                        accountName: "Visa Avion Card",
@@ -94,8 +106,8 @@ extension AccountSummaryViewController {
                                                        accountName: "Student Mastercard",
                                                        balance: 50.83)
         let investment1 = AccountSummaryCell.ViewModel(accountType: .Investment,
-                                                       accountName: "Tax-Free Saver",
-                                                       balance: 2000.00)
+                                                       accountName: "Tax-Free Saver longer",
+                                                       balance: 202312300.00)
         let investment2 = AccountSummaryCell.ViewModel(accountType: .Investment,
                                                        accountName: "Growth Fund",
                                                        balance: 15000.00)
@@ -118,5 +130,11 @@ extension AccountSummaryViewController {
         accounts.append(investment3)
         accounts.append(investment4)
         accounts.append(masterCard2)
+    }
+}
+// MARK: Actions
+extension AccountSummaryViewController {
+    @objc func logoutTapped(sender: UIButton) {
+        NotificationCenter.default.post(name: .logout, object: nil)
     }
 }
