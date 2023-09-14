@@ -33,13 +33,23 @@ class LoginViewController: UIViewController {
     var password: String? {
         return loginView.passwordTextField.text
     }
-        
+    
+    // animation
+    var leadingEdgeOnScreen: CGFloat = 16
+    var leadingEdgeOffScreen: CGFloat = -1000
+
+    var titleLeadingAnchor: NSLayoutConstraint?
+    var subtitleLeadingAnchor: NSLayoutConstraint?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         style()
         layout()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        animate()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -57,13 +67,13 @@ extension LoginViewController {
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont.preferredFont(forTextStyle: .largeTitle)
         titleLabel.text = "Bankey"
+        titleLabel.alpha = 0
         
         subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
         subtitleLabel.textAlignment = .center
         subtitleLabel.font = UIFont.preferredFont(forTextStyle: .title2)
         subtitleLabel.numberOfLines = 0
         subtitleLabel.text = "Your premium source for all things banking!"
-
 
         signInButton.translatesAutoresizingMaskIntoConstraints = false
         signInButton.configuration = .filled()
@@ -103,14 +113,22 @@ extension LoginViewController {
         NSLayoutConstraint.activate([
             // The title label
             subtitleLabel.topAnchor.constraint(equalToSystemSpacingBelow: titleLabel.bottomAnchor, multiplier: 4),
-            titleLabel.leadingAnchor.constraint(equalTo: loginView.leadingAnchor),
+            //titleLabel.leadingAnchor.constraint(equalTo: loginView.leadingAnchor), //zastępujemy przez zmienąą
             titleLabel.trailingAnchor.constraint(equalTo: loginView.trailingAnchor),
             // The subtitle label
             loginView.topAnchor.constraint(equalToSystemSpacingBelow: subtitleLabel.bottomAnchor, multiplier: 2),
-            subtitleLabel.leadingAnchor.constraint(equalTo: loginView.leadingAnchor),
+            //subtitleLabel.leadingAnchor.constraint(equalTo: loginView.leadingAnchor),
             subtitleLabel.trailingAnchor.constraint(equalTo: loginView.trailingAnchor)
-            
         ])
+        
+        //ponieważ jest poza NSLayoutConstraint.activate to trzeba ręcznie aktywować, przy okazji przypisujemy contraint do zmiennej
+        titleLeadingAnchor = titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leadingEdgeOffScreen)
+        titleLeadingAnchor?.isActive = true
+        //to poniżej działa i nie trzeba do amiacj nawet dodawać
+        //subtitleLeadingAnchor = subtitleLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor)
+        subtitleLeadingAnchor = subtitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leadingEdgeOffScreen)
+        subtitleLeadingAnchor?.isActive = true
+        
     }
     
 }
@@ -146,5 +164,35 @@ extension LoginViewController {
         errorMessageLabel.isHidden = false
         errorMessageLabel.text = message
     }
+    
+}
+
+// MARK: - Animations
+extension LoginViewController {
+    private func animate() {
+        
+        let duration = 1.0
+        
+        let animator1 = UIViewPropertyAnimator(duration: duration, curve: .easeInOut) {
+            self.titleLeadingAnchor?.constant = self.leadingEdgeOnScreen
+            self.view.layoutIfNeeded()
+        }
+        animator1.startAnimation()
+        
+        let animator2 = UIViewPropertyAnimator(duration: duration, curve: .easeInOut) {
+            self.subtitleLeadingAnchor?.constant = self.leadingEdgeOnScreen
+            self.view.layoutIfNeeded()
+        }
+        animator2.startAnimation(afterDelay: 0.5)
+        
+        let animator3 = UIViewPropertyAnimator(duration: duration*2, curve: .easeInOut) {
+            self.titleLabel.alpha = 1
+            self.view.layoutIfNeeded()
+        }
+        animator3.startAnimation(afterDelay: 0.5)
+        
+    }
+    
+    
     
 }
