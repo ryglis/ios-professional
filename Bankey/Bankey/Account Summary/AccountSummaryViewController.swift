@@ -117,7 +117,6 @@ extension AccountSummaryViewController {
                 self.profile = profile
                 self.configureTableHeaderView(with: profile)
                 self.tableView.reloadData()
-                print("Dupsko")
             case .failure(let error):
                 print(error.localizedDescription)
             }
