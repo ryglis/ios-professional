@@ -14,6 +14,8 @@
 		2B7F83D32AB0E01F0073CAF8 /* CurrencyFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7F83D22AB0E01F0073CAF8 /* CurrencyFormatterTests.swift */; };
 		2B7F83D52AB0F7A60073CAF8 /* NSNotificationName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7F83D42AB0F7A60073CAF8 /* NSNotificationName.swift */; };
 		2B7F83D72AB0F99E0073CAF8 /* UITextFieldSecureToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7F83D62AB0F99E0073CAF8 /* UITextFieldSecureToggle.swift */; };
+		2B9245282ABCD5F50099B310 /* SkeletonLoadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B9245272ABCD5F50099B310 /* SkeletonLoadable.swift */; };
+		2B92452A2ABCD6810099B310 /* SkeletonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B9245292ABCD6810099B310 /* SkeletonCell.swift */; };
 		2BA64D0A2A8556ED007B90EB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BA64D092A8556ED007B90EB /* AppDelegate.swift */; };
 		2BA64D0E2A8556ED007B90EB /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BA64D0D2A8556ED007B90EB /* LoginViewController.swift */; };
 		2BA64D142A855707007B90EB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2BA64D122A855707007B90EB /* LaunchScreen.storyboard */; };
@@ -53,6 +55,8 @@
 		2B7F83D22AB0E01F0073CAF8 /* CurrencyFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyFormatterTests.swift; sourceTree = "<group>"; };
 		2B7F83D42AB0F7A60073CAF8 /* NSNotificationName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSNotificationName.swift; sourceTree = "<group>"; };
 		2B7F83D62AB0F99E0073CAF8 /* UITextFieldSecureToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldSecureToggle.swift; sourceTree = "<group>"; };
+		2B9245272ABCD5F50099B310 /* SkeletonLoadable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonLoadable.swift; sourceTree = "<group>"; };
+		2B9245292ABCD6810099B310 /* SkeletonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonCell.swift; sourceTree = "<group>"; };
 		2BA64D062A8556ED007B90EB /* Bankey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bankey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2BA64D092A8556ED007B90EB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2BA64D0D2A8556ED007B90EB /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -115,6 +119,8 @@
 			isa = PBXGroup;
 			children = (
 				2B0C21C52AAA608F005CCBF6 /* AccountSummaryCell.swift */,
+				2B9245272ABCD5F50099B310 /* SkeletonLoadable.swift */,
+				2B9245292ABCD6810099B310 /* SkeletonCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -336,6 +342,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2B304DB62A97D09200A2EE7A /* UIViewController+Utils.swift in Sources */,
+				2B92452A2ABCD6810099B310 /* SkeletonCell.swift in Sources */,
 				2BE45F8F2ABB86DF00863ABC /* Date+Utils.swift in Sources */,
 				2BA64D1F2A8561F5007B90EB /* LoginView.swift in Sources */,
 				2BD4A09B2A93FEAB008E78A3 /* LocalState.swift in Sources */,
@@ -353,6 +360,7 @@
 				2BFC52042AA90D7A000EE83B /* AccountSummaryViewController.swift in Sources */,
 				2BA64D0A2A8556ED007B90EB /* AppDelegate.swift in Sources */,
 				2BC539B72A911C9900CB1E20 /* OnboardingContainerViewController.swift in Sources */,
+				2B9245282ABCD5F50099B310 /* SkeletonLoadable.swift in Sources */,
 				2BE45F912ABB879500863ABC /* AccountSummaryViewController+Networking.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
