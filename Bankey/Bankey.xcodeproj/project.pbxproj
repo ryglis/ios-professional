@@ -11,6 +11,8 @@
 		2B0C21C62AAA608F005CCBF6 /* AccountSummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B0C21C52AAA608F005CCBF6 /* AccountSummaryCell.swift */; };
 		2B304DB62A97D09200A2EE7A /* UIViewController+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B304DB52A97D09200A2EE7A /* UIViewController+Utils.swift */; };
 		2B304DB82A97D63600A2EE7A /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B304DB72A97D63600A2EE7A /* MainViewController.swift */; };
+		2B6F01F22AC03C0200AB6220 /* ProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B6F01F12AC03C0200AB6220 /* ProfileManager.swift */; };
+		2B6F01F42AC03DCC00AB6220 /* AccountSummaryViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B6F01F32AC03DCC00AB6220 /* AccountSummaryViewControllerTests.swift */; };
 		2B7F83D32AB0E01F0073CAF8 /* CurrencyFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7F83D22AB0E01F0073CAF8 /* CurrencyFormatterTests.swift */; };
 		2B7F83D52AB0F7A60073CAF8 /* NSNotificationName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7F83D42AB0F7A60073CAF8 /* NSNotificationName.swift */; };
 		2B7F83D72AB0F99E0073CAF8 /* UITextFieldSecureToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7F83D62AB0F99E0073CAF8 /* UITextFieldSecureToggle.swift */; };
@@ -51,6 +53,8 @@
 		2B0C21C52AAA608F005CCBF6 /* AccountSummaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSummaryCell.swift; sourceTree = "<group>"; };
 		2B304DB52A97D09200A2EE7A /* UIViewController+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Utils.swift"; sourceTree = "<group>"; };
 		2B304DB72A97D63600A2EE7A /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		2B6F01F12AC03C0200AB6220 /* ProfileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileManager.swift; sourceTree = "<group>"; };
+		2B6F01F32AC03DCC00AB6220 /* AccountSummaryViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSummaryViewControllerTests.swift; sourceTree = "<group>"; };
 		2B7F83D12AB0D8760073CAF8 /* Bankey.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Bankey.xctestplan; sourceTree = "<group>"; };
 		2B7F83D22AB0E01F0073CAF8 /* CurrencyFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyFormatterTests.swift; sourceTree = "<group>"; };
 		2B7F83D42AB0F7A60073CAF8 /* NSNotificationName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSNotificationName.swift; sourceTree = "<group>"; };
@@ -123,6 +127,14 @@
 				2B9245292ABCD6810099B310 /* SkeletonCell.swift */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		2B6F01F02AC03BCA00AB6220 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				2B6F01F12AC03C0200AB6220 /* ProfileManager.swift */,
+			);
+			path = Networking;
 			sourceTree = "<group>";
 		};
 		2BA64CFD2A8556ED007B90EB = {
@@ -224,6 +236,7 @@
 			children = (
 				2BE45F942ABB93C400863ABC /* ProfileTest.swift */,
 				2BE45F962ABB947500863ABC /* AccountTests.swift */,
+				2B6F01F32AC03DCC00AB6220 /* AccountSummaryViewControllerTests.swift */,
 			);
 			path = AccountSummary;
 			sourceTree = "<group>";
@@ -235,6 +248,7 @@
 				2BE45F902ABB879500863ABC /* AccountSummaryViewController+Networking.swift */,
 				2B0C21C32AAA6057005CCBF6 /* Header */,
 				2B0C21C42AAA6073005CCBF6 /* Cell */,
+				2B6F01F02AC03BCA00AB6220 /* Networking */,
 			);
 			path = "Account Summary";
 			sourceTree = "<group>";
@@ -344,6 +358,7 @@
 				2B304DB62A97D09200A2EE7A /* UIViewController+Utils.swift in Sources */,
 				2B92452A2ABCD6810099B310 /* SkeletonCell.swift in Sources */,
 				2BE45F8F2ABB86DF00863ABC /* Date+Utils.swift in Sources */,
+				2B6F01F22AC03C0200AB6220 /* ProfileManager.swift in Sources */,
 				2BA64D1F2A8561F5007B90EB /* LoginView.swift in Sources */,
 				2BD4A09B2A93FEAB008E78A3 /* LocalState.swift in Sources */,
 				2BFC52062AA91395000EE83B /* AccountSummaryHeaderView.swift in Sources */,
@@ -372,6 +387,7 @@
 				2B7F83D32AB0E01F0073CAF8 /* CurrencyFormatterTests.swift in Sources */,
 				2BE45F972ABB947500863ABC /* AccountTests.swift in Sources */,
 				2BE45F952ABB93C400863ABC /* ProfileTest.swift in Sources */,
+				2B6F01F42AC03DCC00AB6220 /* AccountSummaryViewControllerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

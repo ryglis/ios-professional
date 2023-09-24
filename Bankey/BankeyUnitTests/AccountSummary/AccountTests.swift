@@ -47,12 +47,12 @@ class AccountTests: XCTestCase {
         XCTAssertEqual(result[0].type, .Banking)
         XCTAssertEqual(result[0].name, "Basic Savings")
         XCTAssertEqual(result[0].amount, 929466.23)
-        XCTAssertEqual(result[0].createdDateTime.monthDayYearString, "cze 21, 2010")
+        XCTAssertEqual(result[0].createdDateTime.monthDayYearString, "Jun 21, 2010")
         XCTAssertEqual(result[1].id, "2")
         XCTAssertEqual(result[1].type, .Banking)
         XCTAssertEqual(result[1].name, "No-Fee All-In Chequing")
         XCTAssertEqual(result[1].amount, 17562.44)
-        XCTAssertEqual(result[1].createdDateTime.monthDayYearString, "cze 21, 2011")
+        XCTAssertEqual(result[1].createdDateTime.monthDayYearString, "Jun 21, 2011")
 
     }
 }
