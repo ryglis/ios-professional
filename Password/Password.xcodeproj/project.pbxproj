@@ -11,6 +11,7 @@
 		2BAC7D152AC35FCC00839C80 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BAC7D142AC35FCC00839C80 /* ViewController.swift */; };
 		2BAC7D1A2AC35FCE00839C80 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2BAC7D192AC35FCE00839C80 /* Assets.xcassets */; };
 		2BAC7D1D2AC35FCE00839C80 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2BAC7D1B2AC35FCE00839C80 /* LaunchScreen.storyboard */; };
+		2BAC7D262AC364C300839C80 /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BAC7D252AC364C300839C80 /* PasswordTextField.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +21,7 @@
 		2BAC7D192AC35FCE00839C80 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2BAC7D1C2AC35FCE00839C80 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2BAC7D1E2AC35FCE00839C80 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2BAC7D252AC364C300839C80 /* PasswordTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,9 +54,10 @@
 		2BAC7D0F2AC35FCC00839C80 /* Password */ = {
 			isa = PBXGroup;
 			children = (
+				2BAC7D242AC3629700839C80 /* Files */,
 				2BAC7D102AC35FCC00839C80 /* AppDelegate.swift */,
 				2BAC7D142AC35FCC00839C80 /* ViewController.swift */,
-				2BAC7D242AC3629700839C80 /* Files */,
+				2BAC7D252AC364C300839C80 /* PasswordTextField.swift */,
 			);
 			path = Password;
 			sourceTree = "<group>";
@@ -141,6 +144,7 @@
 			files = (
 				2BAC7D152AC35FCC00839C80 /* ViewController.swift in Sources */,
 				2BAC7D112AC35FCC00839C80 /* AppDelegate.swift in Sources */,
+				2BAC7D262AC364C300839C80 /* PasswordTextField.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
