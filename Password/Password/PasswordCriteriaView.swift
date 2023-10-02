@@ -82,7 +82,6 @@ extension PasswordCriteriaView {
         // CHCR
         imageView.setContentHuggingPriority(UILayoutPriority.defaultHigh, for: .horizontal)
         label.setContentHuggingPriority(UILayoutPriority.defaultLow, for: .horizontal)
-        
-        
     }
+    
 }
