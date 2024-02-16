@@ -10,10 +10,10 @@
 		2B93D7232B697D4A004C4058 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B93D7222B697D4A004C4058 /* AppDelegate.swift */; };
 		2B93D72C2B697D4D004C4058 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2B93D72B2B697D4D004C4058 /* Assets.xcassets */; };
 		2B93D72F2B697D4D004C4058 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2B93D72D2B697D4D004C4058 /* LaunchScreen.storyboard */; };
-		2B93D73B2B6990B5004C4058 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B93D73A2B6990B5004C4058 /* WelcomeView.swift */; };
-		2B93D73D2B6990C7004C4058 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B93D73C2B6990C7004C4058 /* WelcomeViewController.swift */; };
 		2B93D73F2B69A2D2004C4058 /* PlanetTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B93D73E2B69A2D2004C4058 /* PlanetTileView.swift */; };
 		2B93D7412B69A409004C4058 /* PlanetsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B93D7402B69A409004C4058 /* PlanetsViewController.swift */; };
+		2BCDFC042B6AE9960045405D /* MotionTrackingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BCDFC032B6AE9960045405D /* MotionTrackingViewController.swift */; };
+		2BCDFC082B6B017F0045405D /* MotionTrackingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BCDFC072B6B017F0045405D /* MotionTrackingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,10 +22,10 @@
 		2B93D72B2B697D4D004C4058 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2B93D72E2B697D4D004C4058 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2B93D7302B697D4D004C4058 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2B93D73A2B6990B5004C4058 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
-		2B93D73C2B6990C7004C4058 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		2B93D73E2B69A2D2004C4058 /* PlanetTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetTileView.swift; sourceTree = "<group>"; };
 		2B93D7402B69A409004C4058 /* PlanetsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetsViewController.swift; sourceTree = "<group>"; };
+		2BCDFC032B6AE9960045405D /* MotionTrackingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionTrackingViewController.swift; sourceTree = "<group>"; };
+		2BCDFC072B6B017F0045405D /* MotionTrackingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionTrackingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,7 +58,8 @@
 		2B93D7212B697D4A004C4058 /* MyPlanets */ = {
 			isa = PBXGroup;
 			children = (
-				2B93D7372B699066004C4058 /* WelcomeView */,
+				2BCDFC002B6AD3450045405D /* MotionTrackingView */,
+				2B93D7372B699066004C4058 /* PlanetsView */,
 				2B93D7222B697D4A004C4058 /* AppDelegate.swift */,
 				2B93D72B2B697D4D004C4058 /* Assets.xcassets */,
 				2B93D72D2B697D4D004C4058 /* LaunchScreen.storyboard */,
@@ -67,15 +68,22 @@
 			path = MyPlanets;
 			sourceTree = "<group>";
 		};
-		2B93D7372B699066004C4058 /* WelcomeView */ = {
+		2B93D7372B699066004C4058 /* PlanetsView */ = {
 			isa = PBXGroup;
 			children = (
-				2B93D73A2B6990B5004C4058 /* WelcomeView.swift */,
-				2B93D73C2B6990C7004C4058 /* WelcomeViewController.swift */,
 				2B93D73E2B69A2D2004C4058 /* PlanetTileView.swift */,
 				2B93D7402B69A409004C4058 /* PlanetsViewController.swift */,
 			);
-			path = WelcomeView;
+			path = PlanetsView;
+			sourceTree = "<group>";
+		};
+		2BCDFC002B6AD3450045405D /* MotionTrackingView */ = {
+			isa = PBXGroup;
+			children = (
+				2BCDFC032B6AE9960045405D /* MotionTrackingViewController.swift */,
+				2BCDFC072B6B017F0045405D /* MotionTrackingView.swift */,
+			);
+			path = MotionTrackingView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -148,10 +156,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2BCDFC042B6AE9960045405D /* MotionTrackingViewController.swift in Sources */,
 				2B93D73F2B69A2D2004C4058 /* PlanetTileView.swift in Sources */,
-				2B93D73D2B6990C7004C4058 /* WelcomeViewController.swift in Sources */,
-				2B93D73B2B6990B5004C4058 /* WelcomeView.swift in Sources */,
 				2B93D7232B697D4A004C4058 /* AppDelegate.swift in Sources */,
+				2BCDFC082B6B017F0045405D /* MotionTrackingView.swift in Sources */,
 				2B93D7412B69A409004C4058 /* PlanetsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -303,8 +311,8 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = "gyroscope magnetometer location-services";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -337,8 +345,8 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = "gyroscope magnetometer location-services";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

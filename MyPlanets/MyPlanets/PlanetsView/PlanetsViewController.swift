@@ -49,9 +49,6 @@ class PlanetsViewController: UIViewController {
             tileView.translatesAutoresizingMaskIntoConstraints = false
             scrollView.addSubview(tileView)
             tiles.append(tileView)
-
-//            let tileView = PlanetTileView(frame: CGRect(x: 0, y: yOffset, width: tileWidth, height: tileHeight))
-//            let tileView = PlanetTileView(frame: CGRect(x: (screenWidth - tileWidth) / 2, y: yOffset, width: tileWidth, height: tileHeight))
             
             tileView.didSelectButton = { [weak self] in
                 // Handle navigation to details screen
@@ -74,7 +71,6 @@ class PlanetsViewController: UIViewController {
                 ])
             }
             
-//            yOffset += tileHeight + tileSpacing
         }
     }
     
