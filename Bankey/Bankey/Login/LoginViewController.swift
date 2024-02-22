@@ -129,6 +129,13 @@ extension LoginViewController {
         subtitleLeadingAnchor = subtitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leadingEdgeOffScreen)
         subtitleLeadingAnchor?.isActive = true
         
+        print("loginView VIEW HEIGHT = \(loginView.frame.height)")
+        print("loginView VIEW WIDTH = \(loginView.frame.width)")
+        print("loginView VIEW CENTER = \(loginView.center)")
+        print("view VIEW HEIGHT = \(view.frame.height)")
+        print("view VIEW WIDTH = \(view.frame.width)")
+        print("view VIEW CENTER = \(view.center)")
+
     }
     
 }

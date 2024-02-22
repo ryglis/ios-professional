@@ -26,11 +26,11 @@ class MotionTrackingView: UIView {
     
     private func setupView() {
         translatesAutoresizingMaskIntoConstraints = false
-        backgroundColor = .systemOrange
+        backgroundColor = .orange
         createLabels()
         
         motionStackView.axis = .vertical
-        motionStackView.alignment = .center
+        motionStackView.alignment = .leading
         motionStackView.distribution = .fill
         motionStackView.spacing = 8
         motionStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -39,7 +39,7 @@ class MotionTrackingView: UIView {
         for label in labels {
             motionStackView.addArrangedSubview(label.1)
         }
-        motionStackView.backgroundColor = .systemPink
+        motionStackView.backgroundColor = .systemBackground
 
         NSLayoutConstraint.activate([
             // Motion stack view constraints
@@ -66,7 +66,7 @@ class MotionTrackingView: UIView {
             ("thetaDeg", makeLabel(text: "thetaDeg: ")),
             ("q", makeLabel(text: "q: ")),
             ("heading", makeLabel(text: "Heading: ")),
-            ("orientation", makeLabel(text: "Orientation: ")),
+          //  ("orientation", makeLabel(text: "Orientation: ")),
         ]
     }
     

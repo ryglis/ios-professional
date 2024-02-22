@@ -14,6 +14,8 @@ class MotionTrackingViewController: UIViewController {
     let motionManager = CMMotionManager()
     let locationManager = CLLocationManager()
     var mView: MotionTrackingView!
+    var lView: LevelView!
+    var sView: ScopeView!
     private var portraitConstraints: [NSLayoutConstraint] = []
     private var landscapeConstraints: [NSLayoutConstraint] = []
     
@@ -26,26 +28,70 @@ class MotionTrackingViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(handleOrientationChange), name: UIDevice.orientationDidChangeNotification, object: nil)
     }
     
+    // Return false to prevent the view controller from autorotating
+    override var shouldAutorotate: Bool {
+        return true
+    }
+    
+    // Specify which orientations are supported
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .landscape // or any other specific orientation you want to support
+    }
+    //TODO: CONSTRAINTS
+    
     private func setupView() {
+              
         mView = MotionTrackingView()
         mView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(mView)
         
-        initializePortraitConstraints()
-        initializeLandscapeConstraints()
-        updateConstraintsForCurrentOrientation()
+        lView = LevelView()
+        lView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(lView)
+        
+        sView = ScopeView()
+        sView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(sView)
+        
+        initializeConstraints()
+//        initializePortraitConstraints()
+//        initializeLandscapeConstraints()
+//        updateViewForCurrentOrientation()
+//        drawdots()
+        
+    }
+    
+    private func initializeConstraints(){
+        //let topAnchor = mView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 1)
+        //let topAnchor = mView.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 2)
+        NSLayoutConstraint.activate([
+            mView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.safeAreaLayoutGuide.leadingAnchor, multiplier: 2),
+            mView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            lView.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 2),
+    //        view.safeAreaLayoutGuide.bottomAnchor.constraint(equalToSystemSpacingBelow: lView.bottomAnchor, multiplier: 2)
+            view.safeAreaLayoutGuide.trailingAnchor.constraint(equalToSystemSpacingAfter: lView.trailingAnchor, multiplier: 2),
+            
+            sView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            sView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+        ])
     }
     
     private func initializePortraitConstraints(){
-        let topAnchor = mView.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 2)
+        //let topAnchor = mView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 1)
+        //let topAnchor = mView.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 2)
         let centerAnchor = mView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-        portraitConstraints.append(contentsOf: [topAnchor, centerAnchor])
+        let levelBottomAnchor = view.safeAreaLayoutGuide.bottomAnchor.constraint(equalToSystemSpacingBelow: lView.bottomAnchor, multiplier: 2)
+        let levelSideAnchor = view.safeAreaLayoutGuide.trailingAnchor.constraint(equalToSystemSpacingAfter: lView.trailingAnchor, multiplier: 2)
+        portraitConstraints.append(contentsOf: [centerAnchor, levelBottomAnchor, levelSideAnchor])
     }
     
     private func initializeLandscapeConstraints(){
         let leftAnchor = mView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.safeAreaLayoutGuide.leadingAnchor, multiplier: 2)
         let centerAnchor = mView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        landscapeConstraints.append(contentsOf: [leftAnchor, centerAnchor])
+        let levelTopAnchor = lView.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 2)
+//        view.safeAreaLayoutGuide.bottomAnchor.constraint(equalToSystemSpacingBelow: lView.bottomAnchor, multiplier: 2)
+        let levelSideAnchor = view.safeAreaLayoutGuide.trailingAnchor.constraint(equalToSystemSpacingAfter: lView.trailingAnchor, multiplier: 2)
+        landscapeConstraints.append(contentsOf: [leftAnchor, centerAnchor, levelTopAnchor, levelSideAnchor])
     }
     
     private func setupMotionManager() {
@@ -127,28 +173,30 @@ extension MotionTrackingViewController: CLLocationManagerDelegate {
 
 // orientation change code
 extension MotionTrackingViewController {
-    private func updateConstraintsForCurrentOrientation() {
+        
+    private func updateViewForCurrentOrientation() {
         let orientation = UIDevice.current.orientation
         switch orientation {
         case .landscapeLeft, .landscapeRight:
-            deactivateConstraints(portraitConstraints)
-            activateConstraints(landscapeConstraints)
+//            mView.transform = CGAffineTransform.identity
+            sView.transform = CGAffineTransform.identity
         case .portrait:
-            deactivateConstraints(landscapeConstraints)
-            activateConstraints(portraitConstraints)
+//            mView.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2) // Rotate by 90 degrees (pi/2 radians)
+            sView.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2) // Rotate by 90 degrees (pi/2 radians)
         case .faceUp, .faceDown, .portraitUpsideDown, .unknown:
             break
         @unknown default:
             break
         }
     }
+    
     @objc private func handleOrientationChange(_ notification: Notification) {
-        updateConstraintsForCurrentOrientation()
+        updateViewForCurrentOrientation()
         updateOrientationLabel()
     }
 
     private func activateConstraints(_ constraints: [NSLayoutConstraint]) {
-        constraints.forEach { $0.isActive = true }
+        constraints.forEach {$0.isActive = true}
     }
 
     private func deactivateConstraints(_ constraints: [NSLayoutConstraint]) {
@@ -178,3 +226,45 @@ extension UIDeviceOrientation {
         }
     }
 }
+
+extension MotionTrackingViewController {
+    private func drawdots() {
+        
+        // Define the radius of the dots
+        let radius: CGFloat = 5.0
+        
+        // Draw dots at the specified points
+        let redPoints = [
+            CGPoint(x: 33, y: 150),
+            CGPoint(x: 356, y: 299),
+            CGPoint(x: 195, y: 224),
+            CGPoint(x: 120, y: 63),
+            CGPoint(x: 299, y: 386),
+            //CGPoint(x: 195, y: 224),
+        ]
+        
+        let bluePoints = [
+            CGPoint(x: 62, y: 33),
+//            CGPoint(x: -27, y: 123),
+//            CGPoint(x: 205, y: 357),
+//            CGPoint(x: 296, y: 266),
+//            CGPoint(x: 134, y: 195),
+            //CGPoint(x: 195, y: 224),
+        ]
+        
+        // Add a red dot as a subview for each point
+        for point in redPoints {
+            let dotView = UIView(frame: CGRect(x: point.x - radius, y: point.y - radius, width: radius * 2, height: radius * 2))
+            dotView.backgroundColor = .red
+            dotView.layer.cornerRadius = radius
+            view.addSubview(dotView)
+        }
+        for point in bluePoints {
+            let dotView = UIView(frame: CGRect(x: point.x - radius, y: point.y - radius, width: radius * 2, height: radius * 2))
+            dotView.backgroundColor = .blue
+            dotView.layer.cornerRadius = radius
+            view.addSubview(dotView)
+        }
+    }
+}
+

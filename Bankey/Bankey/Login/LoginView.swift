@@ -52,6 +52,10 @@ extension LoginView {
     
         layer.cornerRadius = 5
         clipsToBounds = true
+        
+        print("stackView VIEW HEIGHT = \(stackView.frame.height)")
+        print("stackView VIEW WIDTH = \(stackView.frame.width)")
+        print("stackView VIEW CENTER = \(stackView.center)")
     }
     
     func layout(){

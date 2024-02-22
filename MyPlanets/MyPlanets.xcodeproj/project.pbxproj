@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2B0342B42B87CCB000B9AECE /* LevelErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B0342B32B87CCB000B9AECE /* LevelErrorView.swift */; };
+		2B9213B52B828FD500012ABA /* LevelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B9213B42B828FD500012ABA /* LevelView.swift */; };
+		2B9213B72B82AC3400012ABA /* ScopeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B9213B62B82AC3400012ABA /* ScopeView.swift */; };
 		2B93D7232B697D4A004C4058 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B93D7222B697D4A004C4058 /* AppDelegate.swift */; };
 		2B93D72C2B697D4D004C4058 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2B93D72B2B697D4D004C4058 /* Assets.xcassets */; };
 		2B93D72F2B697D4D004C4058 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2B93D72D2B697D4D004C4058 /* LaunchScreen.storyboard */; };
@@ -17,6 +20,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2B0342B32B87CCB000B9AECE /* LevelErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelErrorView.swift; sourceTree = "<group>"; };
+		2B9213B42B828FD500012ABA /* LevelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelView.swift; sourceTree = "<group>"; };
+		2B9213B62B82AC3400012ABA /* ScopeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScopeView.swift; sourceTree = "<group>"; };
 		2B93D71F2B697D4A004C4058 /* MyPlanets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyPlanets.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B93D7222B697D4A004C4058 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2B93D72B2B697D4D004C4058 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -82,6 +88,9 @@
 			children = (
 				2BCDFC032B6AE9960045405D /* MotionTrackingViewController.swift */,
 				2BCDFC072B6B017F0045405D /* MotionTrackingView.swift */,
+				2B9213B42B828FD500012ABA /* LevelView.swift */,
+				2B0342B32B87CCB000B9AECE /* LevelErrorView.swift */,
+				2B9213B62B82AC3400012ABA /* ScopeView.swift */,
 			);
 			path = MotionTrackingView;
 			sourceTree = "<group>";
@@ -156,9 +165,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2B9213B72B82AC3400012ABA /* ScopeView.swift in Sources */,
 				2BCDFC042B6AE9960045405D /* MotionTrackingViewController.swift in Sources */,
+				2B9213B52B828FD500012ABA /* LevelView.swift in Sources */,
 				2B93D73F2B69A2D2004C4058 /* PlanetTileView.swift in Sources */,
 				2B93D7232B697D4A004C4058 /* AppDelegate.swift in Sources */,
+				2B0342B42B87CCB000B9AECE /* LevelErrorView.swift in Sources */,
 				2BCDFC082B6B017F0045405D /* MotionTrackingView.swift in Sources */,
 				2B93D7412B69A409004C4058 /* PlanetsViewController.swift in Sources */,
 			);
