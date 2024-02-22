@@ -9,6 +9,10 @@ import Foundation
 import UIKit
 
 class LevelView: UIView {
+    
+    let levelView = UIImageView()
+    let levelLabel = UILabel()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -22,38 +26,38 @@ class LevelView: UIView {
     private func setupView() {
         // Create a UIImageView for the SF Symbol
         translatesAutoresizingMaskIntoConstraints = false
-        backgroundColor = .cyan
-        let levelView = UIImageView()
-        let errorMessageLabel = UILabel()
-        
+//        if #available(iOS 15.0, *) {
+//            backgroundColor = .systemMint
+//        } else {
+//            backgroundColor = .blue
+//        }
         // Configure the SF Symbol
-        let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 32, weight: .regular)
+        let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 32, weight: .thin)
         let symbolImage = UIImage(systemName: "circle.and.line.horizontal", withConfiguration: symbolConfiguration)
         levelView.image = symbolImage
-        levelView.tintColor = .red
+        levelView.tintColor = .systemRed
         levelView.translatesAutoresizingMaskIntoConstraints = false
         
-        errorMessageLabel.translatesAutoresizingMaskIntoConstraints = false
-        errorMessageLabel.textAlignment = .center
-        errorMessageLabel.textColor = .systemRed
-        errorMessageLabel.numberOfLines = 0 //zero oznacza że jeśli przekorszy rozmiar linii, to rozszerzy się na kolejną linię, aż do skutku
-        errorMessageLabel.isHidden = false
-        errorMessageLabel.text = "Turn your phone sideways"
+        levelLabel.text = "Keep it levelled"
+        levelLabel.font = UIFont.systemFont(ofSize: 14) // Example font size
+        levelLabel.textColor = UIColor.systemRed
+        levelLabel.translatesAutoresizingMaskIntoConstraints = false
         
         // Add the UIImageView to the view
         addSubview(levelView)
-        addSubview(errorMessageLabel)
+        addSubview(levelLabel)
         
         // Add constraints to position the symbol in the bottom right corner
         NSLayoutConstraint.activate([
             // Motion stack view constraints
-            levelView.topAnchor.constraint(equalTo: topAnchor, constant: 10),
-            levelView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            levelView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-            levelView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
-            errorMessageLabel.topAnchor.constraint(equalToSystemSpacingBelow: levelView.bottomAnchor, multiplier: 2),
-            //errorMessageLabel.leadingAnchor.constraint(equalTo: levelView.leadingAnchor),
-            errorMessageLabel.trailingAnchor.constraint(equalTo: levelView.trailingAnchor)
+            levelLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 2),
+            levelLabel.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 2),
+            levelView.topAnchor.constraint(equalToSystemSpacingBelow: levelLabel.topAnchor, multiplier: 3),
+//            levelView.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 2),
+            trailingAnchor.constraint(equalToSystemSpacingAfter: levelLabel.trailingAnchor, multiplier: 2),
+//            trailingAnchor.constraint(equalToSystemSpacingAfter: levelView.trailingAnchor, multiplier: 2),
+            bottomAnchor.constraint(equalToSystemSpacingBelow: levelView.bottomAnchor, multiplier: 2),
+            levelView.centerXAnchor.constraint(equalTo: centerXAnchor),
         ])
     }
 }

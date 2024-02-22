@@ -27,16 +27,15 @@ class ScopeView: UIView {
     private func setupView() {
         // Create a UIImageView for the SF Symbol
         translatesAutoresizingMaskIntoConstraints = false
-        backgroundColor = .yellow
         let scopeConfiguration = UIImage.SymbolConfiguration(pointSize: 96, weight: .ultraLight)
         let scopeImage = UIImage(systemName: "scope", withConfiguration: scopeConfiguration)
         scope.image = scopeImage
-        scope.tintColor = UIColor.secondarySystemFill
+        scope.tintColor = UIColor.systemIndigo
         scope.translatesAutoresizingMaskIntoConstraints = false
         let arrowConfiguration = UIImage.SymbolConfiguration(pointSize: 72, weight: .ultraLight)
         let arrowImage = UIImage(systemName: "arrowshape.up", withConfiguration: arrowConfiguration)
         arrow.image = arrowImage
-        arrow.tintColor = UIColor.systemRed.withAlphaComponent(0.3) // Adjust opacity here
+        arrow.tintColor = UIColor.systemIndigo.withAlphaComponent(0.3) // Adjust opacity here
         arrow.translatesAutoresizingMaskIntoConstraints = false
         
               

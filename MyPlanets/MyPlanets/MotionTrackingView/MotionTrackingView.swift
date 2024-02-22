@@ -26,7 +26,7 @@ class MotionTrackingView: UIView {
     
     private func setupView() {
         translatesAutoresizingMaskIntoConstraints = false
-        backgroundColor = .orange
+//        backgroundColor = .orange
         createLabels()
         
         motionStackView.axis = .vertical
@@ -58,13 +58,15 @@ class MotionTrackingView: UIView {
             ("roll", makeLabel(text: "Roll: ")),
             ("pitch", makeLabel(text: "Pitch: ")),
             ("yaw", makeLabel(text: "Yaw: ")),
-            ("w", makeLabel(text: "w: ")),
-            ("x", makeLabel(text: "x: ")),
-            ("y", makeLabel(text: "y: ")),
-            ("z", makeLabel(text: "z: ")),
-            ("theta", makeLabel(text: "theta: ")),
-            ("thetaDeg", makeLabel(text: "thetaDeg: ")),
-            ("q", makeLabel(text: "q: ")),
+            ("elevation", makeLabel(text: "Elevation: ")),
+            ("azimuth", makeLabel(text: "Azimuth: ")),
+//            ("w", makeLabel(text: "w: ")),
+//            ("x", makeLabel(text: "x: ")),
+//            ("y", makeLabel(text: "y: ")),
+//            ("z", makeLabel(text: "z: ")),
+//            ("theta", makeLabel(text: "theta: ")),
+//            ("thetaDeg", makeLabel(text: "thetaDeg: ")),
+//            ("q", makeLabel(text: "q: ")),
             ("heading", makeLabel(text: "Heading: ")),
           //  ("orientation", makeLabel(text: "Orientation: ")),
         ]
@@ -72,7 +74,7 @@ class MotionTrackingView: UIView {
     
     private func makeLabel(text: String) -> UILabel {
         let label = UILabel()
-        label.textColor = .white
+        label.textColor = .white.withAlphaComponent(0.5)
         label.textAlignment = .center
         label.text = text
         label.translatesAutoresizingMaskIntoConstraints = false
