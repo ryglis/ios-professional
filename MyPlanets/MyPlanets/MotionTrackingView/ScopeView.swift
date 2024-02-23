@@ -12,7 +12,10 @@ class ScopeView: UIView {
 
     private let scope = UIImageView()
     private let arrow = UIImageView()
+    let radius = 100.0
     //private let arrow = UIImageView(image: UIImage(systemName: "arrowshape.up"))
+    var arrowXConstraint: NSLayoutConstraint!
+    var arrowYConstraint: NSLayoutConstraint!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -43,12 +46,14 @@ class ScopeView: UIView {
         addSubview(scope)
         addSubview(arrow)
         
+        arrowXConstraint = arrow.centerXAnchor.constraint(equalTo: scope.centerXAnchor, constant: -70)
+        arrowYConstraint = arrow.centerYAnchor.constraint(equalTo: scope.centerYAnchor, constant: -70)
         // Add constraints to position the symbol in the bottom right corner
         NSLayoutConstraint.activate([
             scope.centerXAnchor.constraint(equalTo: centerXAnchor),
             scope.centerYAnchor.constraint(equalTo: centerYAnchor),
-            arrow.centerXAnchor.constraint(equalTo: scope.centerXAnchor, constant: -70),
-            arrow.centerYAnchor.constraint(equalTo: scope.centerYAnchor, constant: -70)
+            arrowXConstraint,
+            arrowYConstraint,
         ])
         
         // Start arrow rotation animation
@@ -68,11 +73,26 @@ class ScopeView: UIView {
         return animation
     }
     
-    func updateArrowDirection(to point: CGPoint) {
+    private func updateArrowDirection(to point: CGPoint) {
         // Calculate angle between scope center and the point
+        //TODO: FIX ANGLES
+        //TODO: Przy headingu 360 gwałtowna zmiana Azymutu!!!
         let angle = atan2(point.y - scope.center.y, point.x - scope.center.x)
-        
+//        print(point.y - scope.center.y, point.x - scope.center.x)
+//        print(scope.center.y,scope.center.x)
+//        print(angle)
         // Apply rotation to arrow
         arrow.transform = CGAffineTransform(rotationAngle: angle)
+    }
+    
+    func updateArrow(deltaAngels: [String: Double]) {
+        var x = deltaAngels["deltaAzimuth"] ?? 0.0
+        var y = deltaAngels["deltaElevation"] ?? 0.0
+        let r = sqrt(x * x + y * y)
+        x = x * radius / r
+        y = y * radius / r
+        arrowXConstraint.constant = x
+        arrowYConstraint.constant = -y
+        updateArrowDirection(to: CGPoint(x: x, y: -y))
     }
 }

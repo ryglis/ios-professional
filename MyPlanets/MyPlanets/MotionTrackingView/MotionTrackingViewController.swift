@@ -10,16 +10,19 @@ import CoreMotion
 import CoreLocation
 
 class MotionTrackingViewController: UIViewController {
-    
     let motionManager = CMMotionManager()
     let locationManager = CLLocationManager()
-    var mView: MotionTrackingView!
-    var lView: LevelView!
-    var lErrView: LevelErrorView!
-    var sView: ScopeView!
-    var backgroundView: UIView!
-    
+    let mView = MotionTrackingView()
+    let lView = LevelView()
+    let sView = ScopeView()
+    let lErrView = LevelErrorView()
+    let planetElevation = ("planet Ele", 40.0)
+    let planetAzimuth = ("planet Azi", 256.0)
     let radToDeg = 180.0 / .pi
+    var deltaAngels: [String: Double] = [
+        "deltaAzimuth": 0,
+        "deltaElevation": 0
+    ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,25 +44,27 @@ class MotionTrackingViewController: UIViewController {
     }
     
     private func setupView() {
-        mView = MotionTrackingView()
         mView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(mView)
         
-        lView = LevelView()
         lView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(lView)
         
-        sView = ScopeView()
         sView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(sView)
         
-        lErrView = LevelErrorView()
         lErrView.translatesAutoresizingMaskIntoConstraints = false
         lErrView.transform = CGAffineTransform(rotationAngle: CGFloat.pi / (-2))
         view.addSubview(lErrView)
         
+        mView.updateLabel(updatedLabel: planetElevation)
+        mView.updateLabel(updatedLabel: planetAzimuth)
+        print("Dane planety: (hardcoded)")
+        print(planetElevation)
+        print(planetAzimuth)
+        
         initializeConstraints()
-
+        
     }
     
     private func initializeConstraints(){
@@ -80,9 +85,7 @@ class MotionTrackingViewController: UIViewController {
             lErrView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             lErrView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             lErrView.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: constantMargin),
-          // lErrView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: constantMargin),
             view.trailingAnchor.constraint(greaterThanOrEqualTo: lErrView.trailingAnchor, constant: constantMargin),
-            
         ])
     }
     
@@ -102,11 +105,16 @@ class MotionTrackingViewController: UIViewController {
         locationManager.delegate = self
         locationManager.startUpdatingHeading()
     }
-    
+}
+
+//MARK: Motion update
+extension MotionTrackingViewController {
     private func updateMotion(_ attitude: CMAttitude) {
         updateMotionLabels(attitude)
         let pitch = attitude.pitch
         updateLevelAngle(pitch)
+        updateDeltaAngels(attitude)
+        sView.updateArrow(deltaAngels: deltaAngels)
     }
     
     private func updateLevelAngle(_ pitch: Double) {
@@ -132,48 +140,23 @@ class MotionTrackingViewController: UIViewController {
     }
     
     private func updateMotionLabels(_ attitude: CMAttitude) {
-  
         let roll = attitude.roll * radToDeg
         let pitch = attitude.pitch * radToDeg
         let yaw = attitude.yaw * radToDeg
         let elevation = calculateElevation(roll: roll)
         let azimuth = calculateAzimuth(yaw: yaw)
-//        let quaternion = attitude.quaternion
-//        let w = quaternion.w
-//        let x = quaternion.x
-//        let y = quaternion.y
-//        let z = quaternion.z
-//        let theta = 2 * acos(w)
-//        let thetaDeg = theta * radToDeg
-//        let magnitude = sqrt(w * w + x * x + y * y + z * z)
-        
         let updatedLabelValues = [
             ("roll", roll),
             ("pitch", pitch),
             ("yaw", yaw),
             ("elevation", elevation),
             ("azimuth", azimuth),
-//            ("w", w),
-//            ("x", x),
-//            ("y", y),
-//            ("z", z),
-//            ("theta", theta),
-//            ("thetaDeg", thetaDeg),
-//            ("q", magnitude),
         ]
-        
         for updatedValue in updatedLabelValues {
-            for label in mView.labels {
-                if label.0 == updatedValue.0 {
-                    label.1.text = String(format: "\(updatedValue.0.capitalized): %.2f", updatedValue.1)
-                }
-            }
+            mView.updateLabel(updatedLabel: updatedValue)
         }
     }
     
-}
-
-extension MotionTrackingViewController {
     private func calculateElevation(roll: Double) -> Double {
         let elevation = abs(roll) - 90
         return elevation
@@ -185,26 +168,42 @@ extension MotionTrackingViewController {
         let yaw100 = yaw * 100
         switch orientation {
         case .landscapeLeft, .portrait, .faceUp, .faceDown, .portraitUpsideDown, .unknown:
-            //azimuth = (360.0 + (-yaw + 270.0)).truncatingRemainder(dividingBy: 360.0)
             let result = (36000 + Int(-yaw100)) % 36000
             azimuth = Double(result)
         case .landscapeRight:
-            //azimuth = (360.0 + (yaw + 270.0)).truncatingRemainder(dividingBy: 360.0)
             let result = (36000 + Int(-yaw100 + 18000)) % 36000
             azimuth = Double(result)
         @unknown default:
             break
         }
-//        We calculate (-yaw + 270).
-//        We add 360 to ensure that the result is positive or zero before taking the modulo operation. This is to handle negative values properly.
-//        Then, we take the modulo 360 to ensure that the result is within the range [0, 360).
         return azimuth/100
+    }
+    
+    private func updateDeltaAngels(_ attitude: CMAttitude) {
+        let roll = attitude.roll * radToDeg
+        let yaw = attitude.yaw * radToDeg
+        let elevation = calculateElevation(roll: roll)
+        let azimuth = calculateAzimuth(yaw: yaw)
+        let deltaElevation = planetElevation.1 - elevation
+        var deltaAzimuth = planetAzimuth.1 - azimuth
+        if deltaAzimuth > 180 {
+            deltaAzimuth -= 360
+        } else if deltaAzimuth < -180 {
+            deltaAzimuth += 360 
+        }
+        deltaAngels["deltaAzimuth"] = deltaAzimuth
+        deltaAngels["deltaElevation"] = deltaElevation
     }
 }
 
+//MARK: Heading update
 extension MotionTrackingViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
-        let headingString = String(format: "Heading: %.2f", newHeading.trueHeading)
+        updateHeadingLabel(newHeading)
+    }
+    
+    private func updateHeadingLabel(_ heading: CLHeading) {
+        let headingString = String(format: "Heading: %.2f", heading.trueHeading)
         for label in mView.labels {
             if label.0 == "heading" {
                 label.1.text = headingString
@@ -213,7 +212,7 @@ extension MotionTrackingViewController: CLLocationManagerDelegate {
     }
 }
 
-// orientation change code
+//MARK: Orientation change
 extension MotionTrackingViewController {
         
     private func updateViewForCurrentOrientation() {
@@ -233,36 +232,58 @@ extension MotionTrackingViewController {
     @objc private func handleOrientationChange(_ notification: Notification) {
         updateViewForCurrentOrientation()
     }
-
-    private func activateConstraints(_ constraints: [NSLayoutConstraint]) {
-        constraints.forEach {$0.isActive = true}
-    }
-
-    private func deactivateConstraints(_ constraints: [NSLayoutConstraint]) {
-        constraints.forEach { $0.isActive = false }
-    }
 }
 
-extension UIDeviceOrientation {
-    var toString: String {
-        switch self {
-        case .portrait:
-            return "Portrait"
-        case .portraitUpsideDown:
-            return "PortraitUpsideDown"
-        case .landscapeLeft:
-            return "LandscapeLeft"
-        case .landscapeRight:
-            return "LandscapeRight"
-        case .faceUp:
-            return "FaceUp"
-        case .faceDown:
-            return "FaceDown"
-        case .unknown:
-            return "Unknown"
-        @unknown default:
-            return "Unknown"
+
+//TODO: MOVE TO APPDELEGATE - see below
+//MARK: View state management
+extension MotionTrackingViewController {
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        print("I have disappeared")
+        // Stop motion updates
+        if motionManager.isDeviceMotionActive {
+            motionManager.stopDeviceMotionUpdates()
+        }
+        // Stop location updates
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.stopUpdatingLocation()
         }
     }
 }
 
+//In your UIApplicationDelegate subclass (e.g., AppDelegate.swift), define a protocol for handling lifecycle events:
+//protocol AppLifecycleDelegate: AnyObject {
+//    func applicationWillEnterForeground()
+//    // Add more methods for other lifecycle events as needed
+//}
+
+
+//In your AppDelegate, create a weak reference to the delegate:
+//class AppDelegate: UIResponder, UIApplicationDelegate {
+//    weak var lifecycleDelegate: AppLifecycleDelegate?
+//
+//    func applicationWillEnterForeground(_ application: UIApplication) {
+//        lifecycleDelegate?.applicationWillEnterForeground()
+//    }
+//    // Implement other app delegate methods as needed
+//}
+
+
+//In your view controller, conform to the AppLifecycleDelegate protocol and implement the methods to update your view:
+//class YourViewController: UIViewController, AppLifecycleDelegate {
+//    override func viewDidLoad() {
+//        super.viewDidLoad()
+//        // Set the app delegate's lifecycle delegate to self
+//        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+//            appDelegate.lifecycleDelegate = self
+//        }
+//    }
+//
+//    func applicationWillEnterForeground() {
+//        // Update your view when the app enters the foreground
+//        // Example: Reload data, refresh UI, etc.
+//    }
+//    // Implement other methods from the AppLifecycleDelegate protocol as needed
+//}
+//

@@ -48,9 +48,6 @@ class MotionTrackingView: UIView {
             motionStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             motionStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
         ])
-        print("motionStackView VIEW HEIGHT = \(motionStackView.frame.height)")
-        print("motionStackView VIEW WIDTH = \(motionStackView.frame.width)")
-        print("motionStackView VIEW CENTER = \(motionStackView.center)")
     }
 
     private func createLabels() {
@@ -60,6 +57,8 @@ class MotionTrackingView: UIView {
             ("yaw", makeLabel(text: "Yaw: ")),
             ("elevation", makeLabel(text: "Elevation: ")),
             ("azimuth", makeLabel(text: "Azimuth: ")),
+            ("planet Ele", makeLabel(text: "Planet Ele: ")),
+            ("planet Azi", makeLabel(text: "Planet Azi: ")),
 //            ("w", makeLabel(text: "w: ")),
 //            ("x", makeLabel(text: "x: ")),
 //            ("y", makeLabel(text: "y: ")),
@@ -79,6 +78,14 @@ class MotionTrackingView: UIView {
         label.text = text
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
+    }
+    
+    func updateLabel(updatedLabel: (String, Double)) {
+        for label in labels {
+            if label.0 == updatedLabel.0 {
+                label.1.text = String(format: "\(updatedLabel.0.capitalized): %.2f", updatedLabel.1)
+            }
+        }
     }
     
 }
