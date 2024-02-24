@@ -16,9 +16,8 @@ class MotionTrackingViewController: UIViewController {
     let lView = LevelView()
     let sView = ScopeView()
     let lErrView = LevelErrorView()
-    let planetElevation = ("planet Ele", 40.0)
-    let planetAzimuth = ("planet Azi", 256.0)
-    let radToDeg = 180.0 / .pi
+    let planetElevation = ("planet Ele", 15.0)
+    let planetAzimuth = ("planet Azi", 56.0)
     var deltaAngels: [String: Double] = [
         "deltaAzimuth": 0,
         "deltaElevation": 0
@@ -116,6 +115,7 @@ extension MotionTrackingViewController {
         updateDeltaAngels(attitude)
         sView.updateArrow(deltaAngels: deltaAngels)
     }
+//TODO: I need to check if close by and remove arrow and show a bal!!!!!!
     
     private func updateLevelAngle(_ pitch: Double) {
         let orientation = UIDevice.current.orientation
@@ -128,21 +128,13 @@ extension MotionTrackingViewController {
         @unknown default:
             break
         }
-        lView.levelView.transform = CGAffineTransform.init(rotationAngle: (angleRad))
-        let angle = abs(angleRad) * radToDeg
-        if angle < 20 {
-            lView.levelView.tintColor = .systemGreen.withAlphaComponent(0.5)
-            lView.levelLabel.textColor = .white.withAlphaComponent(0.5)
-        } else {
-            lView.levelView.tintColor = .systemRed
-            lView.levelLabel.textColor = .systemRed
-        }
+        lView.updateLevelBasedOnMotion(angle: angleRad)
     }
     
     private func updateMotionLabels(_ attitude: CMAttitude) {
-        let roll = attitude.roll * radToDeg
-        let pitch = attitude.pitch * radToDeg
-        let yaw = attitude.yaw * radToDeg
+        let roll = attitude.roll * K.radToDeg
+        let pitch = attitude.pitch * K.radToDeg
+        let yaw = attitude.yaw * K.radToDeg
         let elevation = calculateElevation(roll: roll)
         let azimuth = calculateAzimuth(yaw: yaw)
         let updatedLabelValues = [
@@ -180,8 +172,8 @@ extension MotionTrackingViewController {
     }
     
     private func updateDeltaAngels(_ attitude: CMAttitude) {
-        let roll = attitude.roll * radToDeg
-        let yaw = attitude.yaw * radToDeg
+        let roll = attitude.roll * K.radToDeg
+        let yaw = attitude.yaw * K.radToDeg
         let elevation = calculateElevation(roll: roll)
         let azimuth = calculateAzimuth(yaw: yaw)
         let deltaElevation = planetElevation.1 - elevation

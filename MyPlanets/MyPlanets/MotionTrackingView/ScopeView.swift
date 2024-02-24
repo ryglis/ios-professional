@@ -16,6 +16,9 @@ class ScopeView: UIView {
     //private let arrow = UIImageView(image: UIImage(systemName: "arrowshape.up"))
     var arrowXConstraint: NSLayoutConstraint!
     var arrowYConstraint: NSLayoutConstraint!
+    let labelX = UILabel()
+    let labelY = UILabel()
+    let labelAngle = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -41,6 +44,21 @@ class ScopeView: UIView {
         arrow.tintColor = UIColor.systemIndigo.withAlphaComponent(0.3) // Adjust opacity here
         arrow.translatesAutoresizingMaskIntoConstraints = false
         
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.alignment = .center
+        stackView.spacing = 10
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        labelX.text = "Label 1"
+        labelY.text = "Label 2"
+        labelAngle.text = "Label 3"
+        // Add labels to the stack view
+        stackView.addArrangedSubview(labelX)
+        stackView.addArrangedSubview(labelY)
+        stackView.addArrangedSubview(labelAngle)
+        
+        // Add stack view to the main view
+        addSubview(stackView)
               
         // Add the UIImageView to the view
         addSubview(scope)
@@ -54,6 +72,10 @@ class ScopeView: UIView {
             scope.centerYAnchor.constraint(equalTo: centerYAnchor),
             arrowXConstraint,
             arrowYConstraint,
+        ])
+        NSLayoutConstraint.activate([
+            stackView.centerXAnchor.constraint(equalTo: centerXAnchor, constant: 250),
+            stackView.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
         
         // Start arrow rotation animation
@@ -77,12 +99,15 @@ class ScopeView: UIView {
         // Calculate angle between scope center and the point
         //TODO: FIX ANGLES
         //TODO: Przy headingu 360 gwałtowna zmiana Azymutu!!!
-        let angle = atan2(point.y - scope.center.y, point.x - scope.center.x)
-//        print(point.y - scope.center.y, point.x - scope.center.x)
-//        print(scope.center.y,scope.center.x)
-//        print(angle)
+        let angle = atan2(point.x, -point.y)
+        
+        labelX.text = String(format: "X: %.2f", point.x)
+        labelY.text = String(format: "Y: %.2f", point.y)
         // Apply rotation to arrow
         arrow.transform = CGAffineTransform(rotationAngle: angle)
+        let angelDeg = angle * K.radToDeg
+        labelAngle.text = String(format: "Ang: %.2f", angelDeg)
+        
     }
     
     func updateArrow(deltaAngels: [String: Double]) {
