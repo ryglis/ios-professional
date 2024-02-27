@@ -10,6 +10,7 @@
 		2B0342B42B87CCB000B9AECE /* LevelErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B0342B32B87CCB000B9AECE /* LevelErrorView.swift */; };
 		2B0342B62B87F91F00B9AECE /* TODO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B0342B52B87F91F00B9AECE /* TODO.swift */; };
 		2B639E3E2B8AA31A00752F15 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B639E3D2B8AA31A00752F15 /* Constants.swift */; };
+		2B72F8D02B8E76AD00FB435E /* PlanetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B72F8CF2B8E76AD00FB435E /* PlanetView.swift */; };
 		2B9213B52B828FD500012ABA /* LevelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B9213B42B828FD500012ABA /* LevelView.swift */; };
 		2B9213B72B82AC3400012ABA /* ScopeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B9213B62B82AC3400012ABA /* ScopeView.swift */; };
 		2B93D7232B697D4A004C4058 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B93D7222B697D4A004C4058 /* AppDelegate.swift */; };
@@ -25,6 +26,7 @@
 		2B0342B32B87CCB000B9AECE /* LevelErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelErrorView.swift; sourceTree = "<group>"; };
 		2B0342B52B87F91F00B9AECE /* TODO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TODO.swift; sourceTree = "<group>"; };
 		2B639E3D2B8AA31A00752F15 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		2B72F8CF2B8E76AD00FB435E /* PlanetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetView.swift; sourceTree = "<group>"; };
 		2B9213B42B828FD500012ABA /* LevelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelView.swift; sourceTree = "<group>"; };
 		2B9213B62B82AC3400012ABA /* ScopeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScopeView.swift; sourceTree = "<group>"; };
 		2B93D71F2B697D4A004C4058 /* MyPlanets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyPlanets.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -97,6 +99,7 @@
 				2B0342B32B87CCB000B9AECE /* LevelErrorView.swift */,
 				2B9213B62B82AC3400012ABA /* ScopeView.swift */,
 				2B0342B52B87F91F00B9AECE /* TODO.swift */,
+				2B72F8CF2B8E76AD00FB435E /* PlanetView.swift */,
 			);
 			path = MotionTrackingView;
 			sourceTree = "<group>";
@@ -171,6 +174,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2B72F8D02B8E76AD00FB435E /* PlanetView.swift in Sources */,
 				2B9213B72B82AC3400012ABA /* ScopeView.swift in Sources */,
 				2BCDFC042B6AE9960045405D /* MotionTrackingViewController.swift in Sources */,
 				2B9213B52B828FD500012ABA /* LevelView.swift in Sources */,

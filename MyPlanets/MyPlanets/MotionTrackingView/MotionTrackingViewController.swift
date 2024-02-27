@@ -12,16 +12,14 @@ import CoreLocation
 class MotionTrackingViewController: UIViewController {
     let motionManager = CMMotionManager()
     let locationManager = CLLocationManager()
-    let mView = MotionTrackingView()
-    let lView = LevelView()
-    let sView = ScopeView()
-    let lErrView = LevelErrorView()
-    let planetElevation = ("planet Ele", 15.0)
-    let planetAzimuth = ("planet Azi", 56.0)
-    var deltaAngels: [String: Double] = [
-        "deltaAzimuth": 0,
-        "deltaElevation": 0
-    ]
+    let motionDataView = MotionTrackingView()
+    let levelView = LevelView()
+    let scopeView = ScopeView()
+    let levelErrorView = LevelErrorView()
+    let planetView = PlanetView()
+    let planetData: [String: Double] = ["planet Ele": 15.0, "planet Azi": 56.0]
+    var motionData = [String: Double]()
+    var deltaAngels: [String: Double] = ["deltaAzimuth": 0, "deltaElevation": 0]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,27 +41,33 @@ class MotionTrackingViewController: UIViewController {
     }
     
     private func setupView() {
-        mView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(mView)
+        motionDataView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(motionDataView)
+        updatePlanetLabels()
         
-        lView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(lView)
+        levelView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(levelView)
         
-        sView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(sView)
+        scopeView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(scopeView)
         
-        lErrView.translatesAutoresizingMaskIntoConstraints = false
-        lErrView.transform = CGAffineTransform(rotationAngle: CGFloat.pi / (-2))
-        view.addSubview(lErrView)
+        planetView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(planetView)
         
-        mView.updateLabel(updatedLabel: planetElevation)
-        mView.updateLabel(updatedLabel: planetAzimuth)
-        print("Dane planety: (hardcoded)")
-        print(planetElevation)
-        print(planetAzimuth)
+        levelErrorView.translatesAutoresizingMaskIntoConstraints = false
+        levelErrorView.transform = CGAffineTransform(rotationAngle: CGFloat.pi / (-2))
+        view.addSubview(levelErrorView)
         
         initializeConstraints()
         
+    }
+    
+    private func updatePlanetLabels() {
+        print("Dane planety: (hardcoded)")
+        for (key, value) in planetData {
+            motionDataView.updateLabel(updatedLabel: (key, value))
+            print(key, value)
+        }
     }
     
     private func initializeConstraints(){
@@ -72,19 +76,22 @@ class MotionTrackingViewController: UIViewController {
         let constantMargin = (maxSizeOfScreen - maxSizeOfLabel) / 2
         
         NSLayoutConstraint.activate([
-            mView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.safeAreaLayoutGuide.leadingAnchor, multiplier: 2),
-            mView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            motionDataView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.safeAreaLayoutGuide.leadingAnchor, multiplier: 2),
+            motionDataView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             
-            lView.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 2),
-            view.safeAreaLayoutGuide.trailingAnchor.constraint(equalToSystemSpacingAfter: lView.trailingAnchor, multiplier: 2),
+            levelView.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 2),
+            view.safeAreaLayoutGuide.trailingAnchor.constraint(equalToSystemSpacingAfter: levelView.trailingAnchor, multiplier: 2),
             
-            sView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            sView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            scopeView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            scopeView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             
-            lErrView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            lErrView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            lErrView.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: constantMargin),
-            view.trailingAnchor.constraint(greaterThanOrEqualTo: lErrView.trailingAnchor, constant: constantMargin),
+            planetView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            planetView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            levelErrorView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            levelErrorView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            levelErrorView.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: constantMargin),
+            view.trailingAnchor.constraint(greaterThanOrEqualTo: levelErrorView.trailingAnchor, constant: constantMargin),
         ])
     }
     
@@ -95,7 +102,7 @@ class MotionTrackingViewController: UIViewController {
         if motionManager.isDeviceMotionAvailable {
             motionManager.startDeviceMotionUpdates(using: .xTrueNorthZVertical ,to: .main) { [weak self] (data, error) in
                 guard let attitude = data?.attitude else { return }
-                self?.updateMotion(attitude)
+                self?.updateViewDueToNewMotionData(attitude)
             }
         }
     }
@@ -108,47 +115,25 @@ class MotionTrackingViewController: UIViewController {
 
 //MARK: Motion update
 extension MotionTrackingViewController {
-    private func updateMotion(_ attitude: CMAttitude) {
-        updateMotionLabels(attitude)
-        let pitch = attitude.pitch
-        updateLevelAngle(pitch)
-        updateDeltaAngels(attitude)
-        sView.updateArrow(deltaAngels: deltaAngels)
-    }
-//TODO: I need to check if close by and remove arrow and show a bal!!!!!!
-    
-    private func updateLevelAngle(_ pitch: Double) {
-        let orientation = UIDevice.current.orientation
-        var angleRad = pitch
-        switch orientation {
-        case .landscapeLeft, .portrait, .faceUp, .faceDown, .portraitUpsideDown, .unknown:
-            angleRad = -angleRad
-        case .landscapeRight:
-            break
-        @unknown default:
-            break
-        }
-        lView.updateLevelBasedOnMotion(angle: angleRad)
-    }
-    
-    private func updateMotionLabels(_ attitude: CMAttitude) {
-        let roll = attitude.roll * K.radToDeg
-        let pitch = attitude.pitch * K.radToDeg
-        let yaw = attitude.yaw * K.radToDeg
+    private func updateViewDueToNewMotionData(_ newMotionData: CMAttitude) {
+        let roll = newMotionData.roll * K.radToDeg
+        let pitch = newMotionData.pitch * K.radToDeg
+        let yaw = newMotionData.yaw * K.radToDeg
         let elevation = calculateElevation(roll: roll)
         let azimuth = calculateAzimuth(yaw: yaw)
-        let updatedLabelValues = [
-            ("roll", roll),
-            ("pitch", pitch),
-            ("yaw", yaw),
-            ("elevation", elevation),
-            ("azimuth", azimuth),
-        ]
-        for updatedValue in updatedLabelValues {
-            mView.updateLabel(updatedLabel: updatedValue)
-        }
+        motionData["roll"] = roll
+        motionData["pitch"] = pitch
+        motionData["yaw"] = yaw
+        motionData["elevation"] = elevation
+        motionData["azimuth"] = azimuth
+        
+        updateMotionLabels()
+        updateLevelAngle()
+        updateDeltaAngels()
+        updatepPlanetPosition()
+        updateArrow()
     }
-    
+//
     private func calculateElevation(roll: Double) -> Double {
         let elevation = abs(roll) - 90
         return elevation
@@ -171,13 +156,50 @@ extension MotionTrackingViewController {
         return azimuth/100
     }
     
-    private func updateDeltaAngels(_ attitude: CMAttitude) {
-        let roll = attitude.roll * K.radToDeg
-        let yaw = attitude.yaw * K.radToDeg
-        let elevation = calculateElevation(roll: roll)
-        let azimuth = calculateAzimuth(yaw: yaw)
-        let deltaElevation = planetElevation.1 - elevation
-        var deltaAzimuth = planetAzimuth.1 - azimuth
+    private func updateMotionLabels() {
+        if let roll = motionData["roll"] {
+            motionDataView.updateLabel(updatedLabel: ("roll", roll))
+        }
+        if let pitch = motionData["pitch"] {
+            motionDataView.updateLabel(updatedLabel: ("pitch", pitch))
+        }
+        if let yaw = motionData["yaw"] {
+            motionDataView.updateLabel(updatedLabel: ("yaw", yaw))
+        }
+        if let elevation = motionData["elevation"] {
+            motionDataView.updateLabel(updatedLabel: ("elevation", elevation))
+        }
+        if let azimuth = motionData["azimuth"] {
+            motionDataView.updateLabel(updatedLabel: ("azimuth", azimuth))
+        }
+    }
+    
+    private func updateLevelAngle() {
+        let orientation = UIDevice.current.orientation
+        var angleRad = 0.0
+        if let pitch = motionData["pitch"] {
+            angleRad = pitch / K.radToDeg
+        }
+        switch orientation {
+        case .landscapeLeft, .portrait, .faceUp, .faceDown, .portraitUpsideDown, .unknown:
+            angleRad = -angleRad
+        case .landscapeRight:
+            break
+        @unknown default:
+            break
+        }
+        levelView.updateLevelBasedOnMotion(angle: angleRad)
+    }
+    
+    private func updateDeltaAngels() {
+        var deltaElevation = 0.0
+        var deltaAzimuth = 0.0
+        if let phoneElevation = motionData["elevation"], let planetElevation = planetData["planet Ele"] {
+            deltaElevation = planetElevation - phoneElevation
+        }
+        if let phoneAzimuth = motionData["azimuth"], let planetAzimuth = planetData["planet Azi"] {
+            deltaAzimuth = planetAzimuth - phoneAzimuth
+        }
         if deltaAzimuth > 180 {
             deltaAzimuth -= 360
         } else if deltaAzimuth < -180 {
@@ -185,6 +207,19 @@ extension MotionTrackingViewController {
         }
         deltaAngels["deltaAzimuth"] = deltaAzimuth
         deltaAngels["deltaElevation"] = deltaElevation
+    }
+
+    private func updatepPlanetPosition() {
+        planetView.updatePlanetPosition(deltaAngels: deltaAngels)
+    }
+    
+    private func updateArrow() {
+        scopeView.updateArrow(deltaAngels: deltaAngels)
+        if planetView.planetOnScreen() {
+            scopeView.changeArrowVisibility(to: .hidden)
+        } else {
+            scopeView.changeArrowVisibility(to: .visible)
+        }
     }
 }
 
@@ -196,7 +231,7 @@ extension MotionTrackingViewController: CLLocationManagerDelegate {
     
     private func updateHeadingLabel(_ heading: CLHeading) {
         let headingString = String(format: "Heading: %.2f", heading.trueHeading)
-        for label in mView.labels {
+        for label in motionDataView.labels {
             if label.0 == "heading" {
                 label.1.text = headingString
             }
@@ -207,13 +242,13 @@ extension MotionTrackingViewController: CLLocationManagerDelegate {
 //MARK: Orientation change
 extension MotionTrackingViewController {
         
-    private func updateViewForCurrentOrientation() {
+    private func updateErrorViewForOrientation() {
         let orientation = UIDevice.current.orientation
         switch orientation {
         case .landscapeLeft, .landscapeRight:
-            lErrView.isHidden = true
+            levelErrorView.isHidden = true
         case .portrait:
-            lErrView.isHidden = false
+            levelErrorView.isHidden = false
         case .faceUp, .faceDown, .portraitUpsideDown, .unknown:
             break
         @unknown default:
@@ -222,7 +257,7 @@ extension MotionTrackingViewController {
     }
     
     @objc private func handleOrientationChange(_ notification: Notification) {
-        updateViewForCurrentOrientation()
+        updateErrorViewForOrientation()
     }
 }
 

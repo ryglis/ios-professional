@@ -73,7 +73,7 @@ class MotionTrackingView: UIView {
     
     private func makeLabel(text: String) -> UILabel {
         let label = UILabel()
-        label.textColor = .white.withAlphaComponent(0.5)
+        label.textColor = .label.withAlphaComponent(0.5)
         label.textAlignment = .center
         label.text = text
         label.translatesAutoresizingMaskIntoConstraints = false

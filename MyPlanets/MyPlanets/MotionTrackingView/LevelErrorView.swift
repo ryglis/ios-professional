@@ -24,7 +24,7 @@ class LevelErrorView: UIView {
         translatesAutoresizingMaskIntoConstraints = false
         layer.cornerRadius = 10 // Adjust the corner radius as needed
         clipsToBounds = true // Ensures that the content inside the view doesn't overflow the rounded corners
-        backgroundColor = .white.withAlphaComponent(0.7)
+        backgroundColor = .secondarySystemBackground
         
         let errorMessageLabel = UILabel()
         errorMessageLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -46,8 +46,8 @@ class LevelErrorView: UIView {
             errorMessageLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 2),
             trailingAnchor.constraint(equalToSystemSpacingAfter: errorMessageLabel.trailingAnchor
                                       , multiplier: 2),
-            errorMessageLabel.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 2),
-            bottomAnchor.constraint(equalToSystemSpacingBelow: errorMessageLabel.bottomAnchor, multiplier: 2),
+            errorMessageLabel.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 4),
+            bottomAnchor.constraint(equalToSystemSpacingBelow: errorMessageLabel.bottomAnchor, multiplier: 4),
         ])
     }
 }

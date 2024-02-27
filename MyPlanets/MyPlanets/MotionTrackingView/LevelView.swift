@@ -65,8 +65,8 @@ class LevelView: UIView {
         levelView.transform = CGAffineTransform.init(rotationAngle: (angle))
         let angleDeg = abs(angle) * K.radToDeg
         if angleDeg < 20 {
-            levelView.tintColor = .systemGreen.withAlphaComponent(0.5)
-            levelLabel.textColor = .white.withAlphaComponent(0.5)
+            levelView.tintColor = K.mainColour.withAlphaComponent(0.5)
+            levelLabel.textColor = .label.withAlphaComponent(0.5)
         } else {
             levelView.tintColor = .systemRed
             levelLabel.textColor = .systemRed
