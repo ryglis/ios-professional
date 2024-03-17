@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Foundation
 import CoreMotion
 import CoreLocation
 
@@ -13,6 +14,27 @@ class MotionTrackingView: UIView {
 
     var motionStackView = UIStackView()
     var labels: [(String, UILabel)] = []
+    var currentOrientationString: String {
+        switch UIDevice.current.orientation {
+        case .portrait:
+            return "Portrait"
+        case .portraitUpsideDown:
+            return "PortraitUpsideDown"
+        case .landscapeLeft:
+            return "LandscapeLeft"
+        case .landscapeRight:
+            return "LandscapeRight"
+        case .faceUp:
+            return "FaceUp"
+        case .faceDown:
+            return "FaceDown"
+        case .unknown:
+            return "Unknown"
+        @unknown default:
+            return "Unknown"
+        }
+    }
+    
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,7 +48,6 @@ class MotionTrackingView: UIView {
     
     private func setupView() {
         translatesAutoresizingMaskIntoConstraints = false
-//        backgroundColor = .orange
         createLabels()
         
         motionStackView.axis = .vertical
@@ -39,7 +60,9 @@ class MotionTrackingView: UIView {
         for label in labels {
             motionStackView.addArrangedSubview(label.1)
         }
-        motionStackView.backgroundColor = .systemBackground
+        motionStackView.backgroundColor = .clear
+//        motionStackView.backgroundColor = K.backbgroundcolor
+        
 
         NSLayoutConstraint.activate([
             // Motion stack view constraints
@@ -52,28 +75,22 @@ class MotionTrackingView: UIView {
 
     private func createLabels() {
         labels = [
-            ("roll", makeLabel(text: "Roll: ")),
-            ("pitch", makeLabel(text: "Pitch: ")),
-            ("yaw", makeLabel(text: "Yaw: ")),
-            ("elevation", makeLabel(text: "Elevation: ")),
-            ("azimuth", makeLabel(text: "Azimuth: ")),
-            ("planet Ele", makeLabel(text: "Planet Ele: ")),
-            ("planet Azi", makeLabel(text: "Planet Azi: ")),
-//            ("w", makeLabel(text: "w: ")),
-//            ("x", makeLabel(text: "x: ")),
-//            ("y", makeLabel(text: "y: ")),
-//            ("z", makeLabel(text: "z: ")),
-//            ("theta", makeLabel(text: "theta: ")),
-//            ("thetaDeg", makeLabel(text: "thetaDeg: ")),
-//            ("q", makeLabel(text: "q: ")),
-            ("heading", makeLabel(text: "Heading: ")),
-          //  ("orientation", makeLabel(text: "Orientation: ")),
+//            (K.rollLabelKey, makeLabel(text: String(localized: "rollLabel"))),
+            (K.rollLabelKey, makeLabel(text: String(localized: String.LocalizationValue(K.rollLabelKey)))),
+            (K.pitchLabelKey, makeLabel(text: String(localized: String.LocalizationValue(K.pitchLabelKey)))),
+            (K.yawLabelKey, makeLabel(text: String(localized: String.LocalizationValue(K.yawLabelKey)))),
+            (K.elevationLabelKey, makeLabel(text: String(localized: String.LocalizationValue(K.elevationLabelKey)))),
+            (K.azimuthLabelKey, makeLabel(text: String(localized: String.LocalizationValue(K.azimuthLabelKey)))),
+            (K.planetElevationLabelKey, makeLabel(text: String(localized: String.LocalizationValue(K.planetElevationLabelKey)))),
+            (K.planetAzimuthLabelKey, makeLabel(text: String(localized: String.LocalizationValue(K.planetAzimuthLabelKey)))),
+            (K.headingLabelKey, makeLabel(text: String(localized: String.LocalizationValue(K.headingLabelKey)))),
+            (K.orientationLabelKey, makeLabel(text: String(localized: String.LocalizationValue(K.orientationLabelKey)))),
         ]
     }
     
     private func makeLabel(text: String) -> UILabel {
         let label = UILabel()
-        label.textColor = .label.withAlphaComponent(0.5)
+        label.textColor = K.lightCream.withAlphaComponent(0.5)
         label.textAlignment = .center
         label.text = text
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -83,7 +100,20 @@ class MotionTrackingView: UIView {
     func updateLabel(updatedLabel: (String, Double)) {
         for label in labels {
             if label.0 == updatedLabel.0 {
-                label.1.text = String(format: "\(updatedLabel.0.capitalized): %.2f", updatedLabel.1)
+                let labelLocalKey = String.LocalizationValue(label.0)
+                let labelLocalValue = String(localized: labelLocalKey)
+                label.1.text = String(format: "\(labelLocalValue): %.2f", updatedLabel.1)
+            }
+        }
+    }
+    
+    func updateLabel(updatedLabel: String) {
+        for label in labels {
+            if label.0 == updatedLabel {
+                let labelLocalKey = String.LocalizationValue(label.0)
+                let labelLocalValue = String(localized: labelLocalKey)
+                let currentOrientation = currentOrientationString
+                label.1.text = "\(labelLocalValue): \(currentOrientation)"
             }
         }
     }

@@ -17,11 +17,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         window?.backgroundColor = .systemBackground
-        window?.rootViewController = MotionTrackingViewController()
+        
+//        let navigationController = UINavigationController(rootViewController: PlanetsViewController())
+        let navigationController = CustomNavigationController(rootViewController: PlanetsViewController())
+//        let navigationController = CustomNavigationController(rootViewController: MotionTrackingViewController())
+
+//        navigationController.isNavigationBarHidden = true
+        window?.rootViewController = navigationController
+//        window?.rootViewController = MotionTrackingViewController()
 //        window?.rootViewController = PlanetsViewController()
+//        window?.rootViewController = PushViewController()
         
         return true
     }
+    
+//    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+//      return .portrait // Or your desired orientation
+//    }
 
 
 }

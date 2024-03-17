@@ -24,7 +24,7 @@ class LevelErrorView: UIView {
         translatesAutoresizingMaskIntoConstraints = false
         layer.cornerRadius = 10 // Adjust the corner radius as needed
         clipsToBounds = true // Ensures that the content inside the view doesn't overflow the rounded corners
-        backgroundColor = .secondarySystemBackground
+        backgroundColor = K.lightCream
         
         let errorMessageLabel = UILabel()
         errorMessageLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -33,7 +33,7 @@ class LevelErrorView: UIView {
         errorMessageLabel.font = UIFont.boldSystemFont(ofSize: 24.0) // Adjust the font size as needed
         errorMessageLabel.numberOfLines = 0 //zero oznacza że jeśli przekorszy rozmiar linii, to rozszerzy się na kolejną linię, aż do skutku
         errorMessageLabel.isHidden = false
-        errorMessageLabel.text = "Turn your phone sideways"
+        errorMessageLabel.text = String(localized: "phoneSideways")
         
         // Add the UIImageView to the view
         addSubview(errorMessageLabel)
@@ -46,8 +46,8 @@ class LevelErrorView: UIView {
             errorMessageLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 2),
             trailingAnchor.constraint(equalToSystemSpacingAfter: errorMessageLabel.trailingAnchor
                                       , multiplier: 2),
-            errorMessageLabel.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 4),
-            bottomAnchor.constraint(equalToSystemSpacingBelow: errorMessageLabel.bottomAnchor, multiplier: 4),
+            errorMessageLabel.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 8),
+            bottomAnchor.constraint(equalToSystemSpacingBelow: errorMessageLabel.bottomAnchor, multiplier: 8),
         ])
     }
 }

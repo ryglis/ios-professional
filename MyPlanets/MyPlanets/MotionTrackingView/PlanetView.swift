@@ -32,12 +32,12 @@ class PlanetView: UIView {
         let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 32, weight: .thin)
         let symbolImage = UIImage(systemName: "globe.asia.australia.fill", withConfiguration: symbolConfiguration)
         planetView.image = symbolImage
-        planetView.tintColor = K.mainColour
+        planetView.tintColor = K.tealBlue
         planetView.translatesAutoresizingMaskIntoConstraints = false
         
-        planetLabel.text = "Random Planet"
+        planetLabel.text = String(localized: "defaultPlanet")
         planetLabel.font = UIFont.systemFont(ofSize: 14) // Example font size
-        planetLabel.textColor = UIColor.secondaryLabel
+        planetLabel.textColor = K.lightCream
         planetLabel.translatesAutoresizingMaskIntoConstraints = false
         
         // Add the UIImageView to the view
@@ -63,8 +63,8 @@ class PlanetView: UIView {
         let xFactor = width / 40.0
         let yFactor = height / 20.0
         
-        let x = xFactor * (deltaAngels["deltaAzimuth"] ?? 0.0)
-        let y = yFactor * (deltaAngels["deltaElevation"] ?? 0.0)
+        let x = xFactor * (deltaAngels[K.deltaAzimuthValueKey] ?? 0.0)
+        let y = yFactor * (deltaAngels[K.deltaElevationValueKey] ?? 0.0)
 
         planetXConstraint.constant = x
         planetYConstraint.constant = -y

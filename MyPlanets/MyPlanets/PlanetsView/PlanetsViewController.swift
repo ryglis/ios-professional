@@ -11,9 +11,9 @@ class PlanetsViewController: UIViewController {
 //    let tileWidth: CGFloat = 100.0
     let tileWidthPercentage: CGFloat = 0.9 // 90% of the screen width
 //    let tileHeight: CGFloat = 150.0
-    let numberOfTiles = 9
-    let tileSpacing: CGFloat = 30.0
+    let tileSpacing: CGFloat = 24.0
     var tiles: [PlanetTileView] = []
+    let planets = Planets.all
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,8 +21,17 @@ class PlanetsViewController: UIViewController {
         addTilesToScrollView()
     }
     
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+      return .portrait
+    }
+    
+//    // Return false to prevent the view controller from autorotating
+//    override var shouldAutorotate: Bool {
+//        return false
+//    }
+    
     private func setupScrollView() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = K.backbgroundcolor
 //        scrollView.frame = view.bounds
 //        scrollView.contentSize = CGSize(width: view.bounds.width, height: CGFloat(numberOfTiles) * (tileHeight + tileSpacing))
         let safeArea = view.safeAreaLayoutGuide
@@ -43,18 +52,18 @@ class PlanetsViewController: UIViewController {
         let screenWidth = view.bounds.width
         let tileWidth = screenWidth * tileWidthPercentage
         var totalTileHeight: CGFloat = 0.0
+        let numberOfTiles = planets.count
         
         for index in 0..<numberOfTiles {
             let tileView = PlanetTileView()
             tileView.translatesAutoresizingMaskIntoConstraints = false
+            tileView.delegate = self
+            tileView.nameLabel.text = planets[index].name
+            tileView.descriptionLabel.text = planets[index].shortDescription
+            tileView.imageView.image = UIImage(named: planets[index].imageName)
             scrollView.addSubview(tileView)
             tiles.append(tileView)
             
-            tileView.didSelectButton = { [weak self] in
-                // Handle navigation to details screen
-                // You can push a new view controller here to show details
-                self?.navigateToDetails(for: tileView)
-            }
             // Add constraints for each tile
             NSLayoutConstraint.activate([
                 tileView.widthAnchor.constraint(equalToConstant: tileWidth),
@@ -70,11 +79,23 @@ class PlanetsViewController: UIViewController {
                     tileView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -tileSpacing)
                 ])
             }
-            
         }
     }
+}
+
+extension PlanetsViewController: PlanetTileViewDelegate {
     
-    private func navigateToDetails(for tileView: PlanetTileView) {
-        // Handle navigation to details screen
+    func didSelectTileView(_ tileView: PlanetTileView) {
+        // Create the planet data dictionary
+        let planetData: [String: Double] = [
+            K.planetElevationValueKey: 15.0,
+            K.planetAzimuthValueKey: 156.0
+            // Add more planet data as needed
+        ]
+        let motionTrackingVC = MotionTrackingViewController()
+        motionTrackingVC.planetData = planetData
+//        let motionTrackingVC = PushViewController()
+        navigationController?.pushViewController(motionTrackingVC, animated: false)
     }
 }
+

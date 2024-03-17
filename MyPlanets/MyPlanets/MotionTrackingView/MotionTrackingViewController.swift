@@ -12,37 +12,51 @@ import CoreLocation
 class MotionTrackingViewController: UIViewController {
     let motionManager = CMMotionManager()
     let locationManager = CLLocationManager()
-    let motionDataView = MotionTrackingView()
+    let motionTrackingView = MotionTrackingView()
     let levelView = LevelView()
     let scopeView = ScopeView()
     let levelErrorView = LevelErrorView()
     let planetView = PlanetView()
-    let planetData: [String: Double] = ["planet Ele": 15.0, "planet Azi": 56.0]
+    var planetData: [String: Double]?
+//    var planetData: [String: Double] = [K.planetElevationValueKey: 15.0, K.planetAzimuthValueKey: 156.0]
     var motionData = [String: Double]()
-    var deltaAngels: [String: Double] = ["deltaAzimuth": 0, "deltaElevation": 0]
+    var deltaAngels: [String: Double] = [K.deltaElevationValueKey: 0, K.deltaAzimuthValueKey: 0]
+    let cameraViewController = CameraBackgroundViewController()
+    var previousOrientation: UIDeviceOrientation = .unknown
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setupView()
         setupMotionManager()
         setupLocationManager()
         // Listen for device orientation changes
         NotificationCenter.default.addObserver(self, selector: #selector(handleOrientationChange), name: UIDevice.orientationDidChangeNotification, object: nil)
+        previousOrientation = UIDevice.current.orientation
+        
     }
     
-    // Return false to prevent the view controller from autorotating
-    override var shouldAutorotate: Bool {
-        return true
-    }
+//    // Return false to prevent the view controller from autorotating
+//    override var shouldAutorotate: Bool {
+//        return false
+//    }
     
     // Specify which orientations are supported
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .landscape // or any other specific orientation you want to support
+        return .landscapeRight // or any other specific orientation you want to support
     }
     
     private func setupView() {
-        motionDataView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(motionDataView)
+        view.backgroundColor = K.backbgroundcolor
+//        view.backgroundColor = .clear
+        
+        addChild(cameraViewController)
+        cameraViewController.view.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(cameraViewController.view)
+        cameraViewController.didMove(toParent: self)
+        
+        motionTrackingView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(motionTrackingView)
         updatePlanetLabels()
         
         levelView.translatesAutoresizingMaskIntoConstraints = false
@@ -63,21 +77,34 @@ class MotionTrackingViewController: UIViewController {
     }
     
     private func updatePlanetLabels() {
-        print("Dane planety: (hardcoded)")
-        for (key, value) in planetData {
-            motionDataView.updateLabel(updatedLabel: (key, value))
-            print(key, value)
+        guard let planetData = planetData else {
+            planetData = [K.planetElevationValueKey: 0.0, K.planetAzimuthValueKey: 0.0]
+            return
         }
+        print("Dane planety: (hardcoded)")
+        if let elevationValue = planetData[K.planetElevationValueKey] {
+            motionTrackingView.updateLabel(updatedLabel: (K.planetElevationLabelKey, elevationValue))
+            print(K.planetElevationLabelKey, elevationValue)
+        } else {
+            // Handle the case where the key is not found in planetData
+            print("Planet elevation value not found")
+        }
+        if let azimuthValue = planetData[K.planetAzimuthValueKey] {
+            motionTrackingView.updateLabel(updatedLabel: (K.planetAzimuthLabelKey, azimuthValue))
+            print(K.planetAzimuthLabelKey, azimuthValue)
+        } else {
+            // Handle the case where the key is not found in planetData
+            print("Planet azimuth value not found")
+        }
+
     }
     
     private func initializeConstraints(){
         let maxSizeOfLabel = min(view.bounds.width, view.bounds.height)
-        let maxSizeOfScreen = max(view.bounds.width, view.bounds.height)
-        let constantMargin = (maxSizeOfScreen - maxSizeOfLabel) / 2
         
         NSLayoutConstraint.activate([
-            motionDataView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.safeAreaLayoutGuide.leadingAnchor, multiplier: 2),
-            motionDataView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            motionTrackingView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.safeAreaLayoutGuide.leadingAnchor, multiplier: 2),
+            motionTrackingView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             
             levelView.topAnchor.constraint(equalToSystemSpacingBelow: view.safeAreaLayoutGuide.topAnchor, multiplier: 2),
             view.safeAreaLayoutGuide.trailingAnchor.constraint(equalToSystemSpacingAfter: levelView.trailingAnchor, multiplier: 2),
@@ -90,11 +117,18 @@ class MotionTrackingViewController: UIViewController {
             
             levelErrorView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             levelErrorView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            levelErrorView.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: constantMargin),
-            view.trailingAnchor.constraint(greaterThanOrEqualTo: levelErrorView.trailingAnchor, constant: constantMargin),
+            levelErrorView.widthAnchor.constraint(lessThanOrEqualToConstant: maxSizeOfLabel),
+            
+            cameraViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            cameraViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            cameraViewController.view.topAnchor.constraint(equalTo: view.topAnchor),
+            cameraViewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
     }
-    
+}
+
+//MARK: Motion update
+extension MotionTrackingViewController {
     private func setupMotionManager() {
         motionManager.deviceMotionUpdateInterval = 0.1
         motionManager.showsDeviceMovementDisplay = true
@@ -107,25 +141,17 @@ class MotionTrackingViewController: UIViewController {
         }
     }
     
-    private func setupLocationManager() {
-        locationManager.delegate = self
-        locationManager.startUpdatingHeading()
-    }
-}
-
-//MARK: Motion update
-extension MotionTrackingViewController {
     private func updateViewDueToNewMotionData(_ newMotionData: CMAttitude) {
         let roll = newMotionData.roll * K.radToDeg
         let pitch = newMotionData.pitch * K.radToDeg
         let yaw = newMotionData.yaw * K.radToDeg
         let elevation = calculateElevation(roll: roll)
         let azimuth = calculateAzimuth(yaw: yaw)
-        motionData["roll"] = roll
-        motionData["pitch"] = pitch
-        motionData["yaw"] = yaw
-        motionData["elevation"] = elevation
-        motionData["azimuth"] = azimuth
+        motionData[K.rollValueKey] = roll
+        motionData[K.pitchValueKey] = pitch
+        motionData[K.yawValueKey] = yaw
+        motionData[K.elevationValueKey] = elevation
+        motionData[K.azimuthValueKey] = azimuth
         
         updateMotionLabels()
         updateLevelAngle()
@@ -157,27 +183,27 @@ extension MotionTrackingViewController {
     }
     
     private func updateMotionLabels() {
-        if let roll = motionData["roll"] {
-            motionDataView.updateLabel(updatedLabel: ("roll", roll))
+        if let roll = motionData[K.rollValueKey] {
+            motionTrackingView.updateLabel(updatedLabel: (K.rollLabelKey, roll))
         }
-        if let pitch = motionData["pitch"] {
-            motionDataView.updateLabel(updatedLabel: ("pitch", pitch))
+        if let pitch = motionData[K.pitchValueKey] {
+            motionTrackingView.updateLabel(updatedLabel: (K.pitchLabelKey, pitch))
         }
-        if let yaw = motionData["yaw"] {
-            motionDataView.updateLabel(updatedLabel: ("yaw", yaw))
+        if let yaw = motionData[K.yawValueKey] {
+            motionTrackingView.updateLabel(updatedLabel: (K.yawLabelKey, yaw))
         }
-        if let elevation = motionData["elevation"] {
-            motionDataView.updateLabel(updatedLabel: ("elevation", elevation))
+        if let elevation = motionData[K.elevationValueKey] {
+            motionTrackingView.updateLabel(updatedLabel: (K.elevationLabelKey, elevation))
         }
-        if let azimuth = motionData["azimuth"] {
-            motionDataView.updateLabel(updatedLabel: ("azimuth", azimuth))
+        if let azimuth = motionData[K.azimuthValueKey] {
+            motionTrackingView.updateLabel(updatedLabel: (K.azimuthLabelKey, azimuth))
         }
     }
     
     private func updateLevelAngle() {
         let orientation = UIDevice.current.orientation
         var angleRad = 0.0
-        if let pitch = motionData["pitch"] {
+        if let pitch = motionData[K.pitchValueKey] {
             angleRad = pitch / K.radToDeg
         }
         switch orientation {
@@ -192,12 +218,16 @@ extension MotionTrackingViewController {
     }
     
     private func updateDeltaAngels() {
+        guard let planetData = planetData else {
+            planetData = [K.planetElevationValueKey: 0.0, K.planetAzimuthValueKey: 0.0]
+            return
+        }
         var deltaElevation = 0.0
         var deltaAzimuth = 0.0
-        if let phoneElevation = motionData["elevation"], let planetElevation = planetData["planet Ele"] {
+        if let phoneElevation = motionData[K.elevationValueKey], let planetElevation = planetData[K.planetElevationValueKey] {
             deltaElevation = planetElevation - phoneElevation
         }
-        if let phoneAzimuth = motionData["azimuth"], let planetAzimuth = planetData["planet Azi"] {
+        if let phoneAzimuth = motionData[K.azimuthValueKey], let planetAzimuth = planetData[K.planetAzimuthValueKey] {
             deltaAzimuth = planetAzimuth - phoneAzimuth
         }
         if deltaAzimuth > 180 {
@@ -205,8 +235,8 @@ extension MotionTrackingViewController {
         } else if deltaAzimuth < -180 {
             deltaAzimuth += 360 
         }
-        deltaAngels["deltaAzimuth"] = deltaAzimuth
-        deltaAngels["deltaElevation"] = deltaElevation
+        deltaAngels[K.deltaAzimuthValueKey] = deltaAzimuth
+        deltaAngels[K.deltaElevationValueKey] = deltaElevation
     }
 
     private func updatepPlanetPosition() {
@@ -221,21 +251,47 @@ extension MotionTrackingViewController {
             scopeView.changeArrowVisibility(to: .visible)
         }
     }
+    
+    func stopMotionUpdatesIfNeeded() {
+        if motionManager.isDeviceMotionActive {
+            motionManager.stopDeviceMotionUpdates()
+        }
+    }
 }
 
 //MARK: Heading update
 extension MotionTrackingViewController: CLLocationManagerDelegate {
+    private func setupLocationManager() {
+        locationManager.delegate = self
+        locationManager.startUpdatingHeading()
+    }
+    
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
         updateHeadingLabel(newHeading)
     }
     
     private func updateHeadingLabel(_ heading: CLHeading) {
-        let headingString = String(format: "Heading: %.2f", heading.trueHeading)
-        for label in motionDataView.labels {
-            if label.0 == "heading" {
-                label.1.text = headingString
+        motionTrackingView.updateLabel(updatedLabel: (K.headingLabelKey, heading.trueHeading))
+    }
+    
+    func stopHeadingUpdatesIfNeeded() {
+        DispatchQueue.global().async {
+            if CLLocationManager.locationServicesEnabled() {
+                DispatchQueue.main.async {
+                    switch self.locationManager.authorizationStatus {
+                    case .authorizedAlways, .authorizedWhenInUse:
+                        self.locationManager.stopUpdatingHeading() // Stop updating heading
+                    default:
+                        break // Do nothing if not authorized
+                    }
+                }
             }
         }
+    }
+    
+    // CLLocationManagerDelegate method to handle authorization changes
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        stopHeadingUpdatesIfNeeded()
     }
 }
 
@@ -244,73 +300,55 @@ extension MotionTrackingViewController {
         
     private func updateErrorViewForOrientation() {
         let orientation = UIDevice.current.orientation
+        //previousOrientation = currentOrientation
         switch orientation {
         case .landscapeLeft, .landscapeRight:
             levelErrorView.isHidden = true
+            previousOrientation = orientation
         case .portrait:
             levelErrorView.isHidden = false
-        case .faceUp, .faceDown, .portraitUpsideDown, .unknown:
+        //TODO: FIX orientation changes
+            //            if previousOrientation == .landscapeRight {
+//                levelErrorView.transform = CGAffineTransform(rotationAngle: .zero)
+//            }
+            previousOrientation = orientation
+        case .portraitUpsideDown:
+            levelErrorView.isHidden = false
+
+            previousOrientation = orientation
+        case .faceUp, .faceDown, .unknown:
+            previousOrientation = orientation
             break
         @unknown default:
             break
         }
     }
     
+    private func updateCameraViewForOrientation() {
+        cameraViewController.orientationDidChange()
+    }
+    
     @objc private func handleOrientationChange(_ notification: Notification) {
+        motionTrackingView.updateLabel(updatedLabel: K.orientationLabelKey)
         updateErrorViewForOrientation()
+        //updateCameraViewForOrientation()
     }
 }
 
-
-//TODO: MOVE TO APPDELEGATE - see below
 //MARK: View state management
 extension MotionTrackingViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        print("I have disappeared")
+        print("I will disappear")
         // Stop motion updates
-        if motionManager.isDeviceMotionActive {
-            motionManager.stopDeviceMotionUpdates()
-        }
-        // Stop location updates
-        if CLLocationManager.locationServicesEnabled() {
-            locationManager.stopUpdatingLocation()
-        }
+        stopHeadingUpdatesIfNeeded()
+        stopMotionUpdatesIfNeeded()
     }
 }
 
-//In your UIApplicationDelegate subclass (e.g., AppDelegate.swift), define a protocol for handling lifecycle events:
-//protocol AppLifecycleDelegate: AnyObject {
-//    func applicationWillEnterForeground()
-//    // Add more methods for other lifecycle events as needed
-//}
+extension MotionTrackingViewController {
+    @objc func popTapped(sender: UIButton) {
+        navigationController?.popViewController(animated: false)
+    }
+}
 
-
-//In your AppDelegate, create a weak reference to the delegate:
-//class AppDelegate: UIResponder, UIApplicationDelegate {
-//    weak var lifecycleDelegate: AppLifecycleDelegate?
-//
-//    func applicationWillEnterForeground(_ application: UIApplication) {
-//        lifecycleDelegate?.applicationWillEnterForeground()
-//    }
-//    // Implement other app delegate methods as needed
-//}
-
-
-//In your view controller, conform to the AppLifecycleDelegate protocol and implement the methods to update your view:
-//class YourViewController: UIViewController, AppLifecycleDelegate {
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//        // Set the app delegate's lifecycle delegate to self
-//        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-//            appDelegate.lifecycleDelegate = self
-//        }
-//    }
-//
-//    func applicationWillEnterForeground() {
-//        // Update your view when the app enters the foreground
-//        // Example: Reload data, refresh UI, etc.
-//    }
-//    // Implement other methods from the AppLifecycleDelegate protocol as needed
-//}
-//

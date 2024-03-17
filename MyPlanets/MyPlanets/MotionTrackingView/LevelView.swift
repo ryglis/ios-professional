@@ -26,11 +26,6 @@ class LevelView: UIView {
     private func setupView() {
         // Create a UIImageView for the SF Symbol
         translatesAutoresizingMaskIntoConstraints = false
-//        if #available(iOS 15.0, *) {
-//            backgroundColor = .systemMint
-//        } else {
-//            backgroundColor = .blue
-//        }
         // Configure the SF Symbol
         let symbolConfiguration = UIImage.SymbolConfiguration(pointSize: 32, weight: .thin)
         let symbolImage = UIImage(systemName: "circle.and.line.horizontal", withConfiguration: symbolConfiguration)
@@ -38,7 +33,7 @@ class LevelView: UIView {
         levelView.tintColor = .systemRed
         levelView.translatesAutoresizingMaskIntoConstraints = false
         
-        levelLabel.text = "Keep it levelled"
+        levelLabel.text = String(localized: "keepLevel")
         levelLabel.font = UIFont.systemFont(ofSize: 14) // Example font size
         levelLabel.textColor = UIColor.systemRed
         levelLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -65,8 +60,8 @@ class LevelView: UIView {
         levelView.transform = CGAffineTransform.init(rotationAngle: (angle))
         let angleDeg = abs(angle) * K.radToDeg
         if angleDeg < 20 {
-            levelView.tintColor = K.mainColour.withAlphaComponent(0.5)
-            levelLabel.textColor = .label.withAlphaComponent(0.5)
+            levelView.tintColor = K.tealBlue.withAlphaComponent(0.5)
+            levelLabel.textColor = K.lightCream.withAlphaComponent(0.5)
         } else {
             levelView.tintColor = .systemRed
             levelLabel.textColor = .systemRed
