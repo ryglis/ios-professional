@@ -85,6 +85,8 @@ class MotionTrackingView: UIView {
             (K.planetAzimuthLabelKey, makeLabel(text: String(localized: String.LocalizationValue(K.planetAzimuthLabelKey)))),
             (K.headingLabelKey, makeLabel(text: String(localized: String.LocalizationValue(K.headingLabelKey)))),
             (K.orientationLabelKey, makeLabel(text: String(localized: String.LocalizationValue(K.orientationLabelKey)))),
+            (K.latitudeLabelKey, makeLabel(text: String(localized: String.LocalizationValue(K.latitudeLabelKey)))),
+            (K.longitudeLabelKey, makeLabel(text: String(localized: String.LocalizationValue(K.longitudeLabelKey)))),
         ]
     }
     
@@ -107,7 +109,7 @@ class MotionTrackingView: UIView {
         }
     }
     
-    func updateLabel(updatedLabel: String) {
+    func updateOrientationLabel(updatedLabel: String) {
         for label in labels {
             if label.0 == updatedLabel {
                 let labelLocalKey = String.LocalizationValue(label.0)

@@ -65,12 +65,12 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2B2C0D622BA39DA900014D46 /* Helpers */ = {
+		2B2C0D622BA39DA900014D46 /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
 				2B2C0D632BA39DDA00014D46 /* CustomNavigationController.swift */,
 			);
-			path = Helpers;
+			path = Navigation;
 			sourceTree = "<group>";
 		};
 		2B93D7162B697D4A004C4058 = {
@@ -93,7 +93,7 @@
 			isa = PBXGroup;
 			children = (
 				2BC8E4A42BA77812000E738A /* Model */,
-				2B2C0D622BA39DA900014D46 /* Helpers */,
+				2B2C0D622BA39DA900014D46 /* Navigation */,
 				2BCEDA6E2B9B77CE009208EC /* Sandbox */,
 				2BCDFC002B6AD3450045405D /* MotionTrackingView */,
 				2B93D7372B699066004C4058 /* PlanetsView */,
@@ -388,7 +388,8 @@
 				INFOPLIST_FILE = MyPlanets/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "My Planets";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
-				INFOPLIST_KEY_NSCameraUsageDescription = "";
+				INFOPLIST_KEY_NSCameraUsageDescription = "We need your camera";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIRequiredDeviceCapabilities = "gyroscope magnetometer location-services";
@@ -424,7 +425,8 @@
 				INFOPLIST_FILE = MyPlanets/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "My Planets";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
-				INFOPLIST_KEY_NSCameraUsageDescription = "";
+				INFOPLIST_KEY_NSCameraUsageDescription = "We need your camera";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIRequiredDeviceCapabilities = "gyroscope magnetometer location-services";

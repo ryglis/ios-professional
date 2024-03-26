@@ -65,9 +65,13 @@ class PlanetView: UIView {
         
         let x = xFactor * (deltaAngels[K.deltaAzimuthValueKey] ?? 0.0)
         let y = yFactor * (deltaAngels[K.deltaElevationValueKey] ?? 0.0)
-
-        planetXConstraint.constant = x
-        planetYConstraint.constant = -y
+        let pitchAngle = -(deltaAngels[K.pitchAngleValueKey] ?? 0.0)
+        
+        let xT = x * Darwin.cos(pitchAngle) - y * sin(pitchAngle)
+        let yT = x * Darwin.sin(pitchAngle) + y * cos(pitchAngle)
+                      
+        planetXConstraint.constant = xT
+        planetYConstraint.constant = -yT
     }
     
     func planetOnScreen() -> Bool {

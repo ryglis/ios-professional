@@ -104,7 +104,41 @@
         }
       }
     },
-    "orientation" : {
+    "latitudeLabel" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Latitude: "
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Latuś: "
+          }
+        }
+      }
+    },
+    "longitudeLabel" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Longitude: "
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Longuś: "
+          }
+        }
+      }
+    },
+    "orientationLabel" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {

@@ -20,9 +20,10 @@ class MotionTrackingViewController: UIViewController {
     var planetData: [String: Double]?
 //    var planetData: [String: Double] = [K.planetElevationValueKey: 15.0, K.planetAzimuthValueKey: 156.0]
     var motionData = [String: Double]()
-    var deltaAngels: [String: Double] = [K.deltaElevationValueKey: 0, K.deltaAzimuthValueKey: 0]
+    var deltaAngels: [String: Double] = [K.deltaElevationValueKey: 0, K.deltaAzimuthValueKey: 0, K.pitchAngleValueKey: 0]
     let cameraViewController = CameraBackgroundViewController()
     var previousOrientation: UIDeviceOrientation = .unknown
+    var lastLandscapeOrientation: UIDeviceOrientation = .landscapeLeft
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,21 +31,23 @@ class MotionTrackingViewController: UIViewController {
         setupView()
         setupMotionManager()
         setupLocationManager()
+        updateErrorViewForOrientation()
+        
         // Listen for device orientation changes
         NotificationCenter.default.addObserver(self, selector: #selector(handleOrientationChange), name: UIDevice.orientationDidChangeNotification, object: nil)
         previousOrientation = UIDevice.current.orientation
         
+        
     }
     
+//    // Specify which orientations are supported
+//    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+//        return .landscapeRight
+//    }
 //    // Return false to prevent the view controller from autorotating
 //    override var shouldAutorotate: Bool {
 //        return false
 //    }
-    
-    // Specify which orientations are supported
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .landscapeRight // or any other specific orientation you want to support
-    }
     
     private func setupView() {
         view.backgroundColor = K.backbgroundcolor
@@ -96,6 +99,9 @@ class MotionTrackingViewController: UIViewController {
             // Handle the case where the key is not found in planetData
             print("Planet azimuth value not found")
         }
+        let sharedLocation = SharedLocation.values
+        motionTrackingView.updateLabel(updatedLabel: (K.latitudeLabelKey, sharedLocation.latitude))
+        motionTrackingView.updateLabel(updatedLabel: (K.longitudeLabelKey, sharedLocation.longitude))
 
     }
     
@@ -170,16 +176,32 @@ extension MotionTrackingViewController {
         var azimuth = 0.0
         let yaw100 = yaw * 100
         switch orientation {
-        case .landscapeLeft, .portrait, .faceUp, .faceDown, .portraitUpsideDown, .unknown:
-            let result = (36000 + Int(-yaw100)) % 36000
-            azimuth = Double(result)
         case .landscapeRight:
             let result = (36000 + Int(-yaw100 + 18000)) % 36000
             azimuth = Double(result)
-        @unknown default:
-            break
+        default:
+            let result = (36000 + Int(-yaw100)) % 36000
+            azimuth = Double(result)
         }
         return azimuth/100
+    }
+    
+    private func calculatePitchAngle() -> Double {
+        let orientation = UIDevice.current.orientation
+        var angleRad = 0.0
+        if let pitch = motionData[K.pitchValueKey] {
+            angleRad = pitch / K.radToDeg
+        }
+        switch orientation {
+        case .landscapeLeft:
+            angleRad = -angleRad
+            levelView.isHidden = false
+        case .landscapeRight:
+            levelView.isHidden = false
+        default:
+            levelView.isHidden = true
+        }
+        return angleRad
     }
     
     private func updateMotionLabels() {
@@ -201,19 +223,7 @@ extension MotionTrackingViewController {
     }
     
     private func updateLevelAngle() {
-        let orientation = UIDevice.current.orientation
-        var angleRad = 0.0
-        if let pitch = motionData[K.pitchValueKey] {
-            angleRad = pitch / K.radToDeg
-        }
-        switch orientation {
-        case .landscapeLeft, .portrait, .faceUp, .faceDown, .portraitUpsideDown, .unknown:
-            angleRad = -angleRad
-        case .landscapeRight:
-            break
-        @unknown default:
-            break
-        }
+        let angleRad = calculatePitchAngle()
         levelView.updateLevelBasedOnMotion(angle: angleRad)
     }
     
@@ -237,6 +247,7 @@ extension MotionTrackingViewController {
         }
         deltaAngels[K.deltaAzimuthValueKey] = deltaAzimuth
         deltaAngels[K.deltaElevationValueKey] = deltaElevation
+        deltaAngels[K.pitchAngleValueKey] = calculatePitchAngle()
     }
 
     private func updatepPlanetPosition() {
@@ -300,27 +311,39 @@ extension MotionTrackingViewController {
         
     private func updateErrorViewForOrientation() {
         let orientation = UIDevice.current.orientation
-        //previousOrientation = currentOrientation
+        //show hide code
         switch orientation {
         case .landscapeLeft, .landscapeRight:
             levelErrorView.isHidden = true
-            previousOrientation = orientation
-        case .portrait:
+        default:
             levelErrorView.isHidden = false
-        //TODO: FIX orientation changes
-            //            if previousOrientation == .landscapeRight {
-//                levelErrorView.transform = CGAffineTransform(rotationAngle: .zero)
-//            }
-            previousOrientation = orientation
-        case .portraitUpsideDown:
-            levelErrorView.isHidden = false
-
-            previousOrientation = orientation
-        case .faceUp, .faceDown, .unknown:
-            previousOrientation = orientation
-            break
-        @unknown default:
-            break
+        }
+        //rotation code
+        levelErrorView.transform = .identity
+        if previousOrientation == .landscapeRight || lastLandscapeOrientation == .landscapeRight {
+            switch orientation {
+            case .portraitUpsideDown:
+                levelErrorView.transform = CGAffineTransform(rotationAngle: CGFloat.pi / (-2))
+            default:
+                levelErrorView.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
+            }
+        } else {
+            switch orientation {
+            case .portraitUpsideDown:
+                levelErrorView.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
+            default:
+                levelErrorView.transform = CGAffineTransform(rotationAngle: CGFloat.pi / (-2))
+            }
+        }
+    }
+    
+    private func updateScopeViewForOrientation() {
+        let orientation = UIDevice.current.orientation
+        switch orientation {
+        case .landscapeLeft, .landscapeRight:
+            scopeView.changeArrowVisibility(to: .visible)
+        default:
+            scopeView.changeArrowVisibility(to: .hidden)
         }
     }
     
@@ -329,9 +352,15 @@ extension MotionTrackingViewController {
     }
     
     @objc private func handleOrientationChange(_ notification: Notification) {
-        motionTrackingView.updateLabel(updatedLabel: K.orientationLabelKey)
+        let orientation = UIDevice.current.orientation
+        motionTrackingView.updateOrientationLabel(updatedLabel: K.orientationLabelKey)
         updateErrorViewForOrientation()
-        //updateCameraViewForOrientation()
+        updateScopeViewForOrientation()
+        updateCameraViewForOrientation()
+        if orientation == .landscapeLeft || orientation == .landscapeRight {
+            lastLandscapeOrientation = orientation
+        }
+        previousOrientation = orientation
     }
 }
 

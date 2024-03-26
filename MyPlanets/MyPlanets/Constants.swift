@@ -10,6 +10,7 @@ import UIKit
 struct K {
     static let radToDeg = 180.0 / .pi
     
+    //names of localized labels keys
     static let rollLabelKey = "rollLabel"
     static let pitchLabelKey = "pitchLabel"
     static let yawLabelKey = "yawLabel"
@@ -18,7 +19,9 @@ struct K {
     static let headingLabelKey = "headingLabel"
     static let planetElevationLabelKey = "planetElevationLabel"
     static let planetAzimuthLabelKey = "planetAzimuthLabel"
-    static let orientationLabelKey = "orientation"
+    static let orientationLabelKey = "orientationLabel"
+    static let latitudeLabelKey = "latitudeLabel"
+    static let longitudeLabelKey = "longitudeLabel"
     
     static let rollValueKey = "roll"
     static let pitchValueKey = "pitch"
@@ -30,6 +33,7 @@ struct K {
     static let planetAzimuthValueKey = "planetAzimuth"
     static let deltaElevationValueKey = "deltaElevation"
     static let deltaAzimuthValueKey = "deltaAzimuth"
+    static let pitchAngleValueKey = "pitchAngle"
     
     // https://mycolor.space/?hex=%23090E26&sub=1
     static let backbgroundcolor = UIColor(red: 9/255.0, green: 14/255.0, blue: 38/255.0, alpha: 1.0)

@@ -90,21 +90,25 @@ class ScopeView: UIView {
     
     private func updateArrowDirection(to point: CGPoint) {
         // Calculate angle between scope center and the point
-        //TODO: FIX ANGLES
-        //TODO: Przy headingu 360 gwałtowna zmiana Azymutu!!!
-        let angle = atan2(point.x, -point.y)        
+        let angle = atan2(point.x, -point.y)
         arrow.transform = CGAffineTransform(rotationAngle: angle)
     }
     
     func updateArrow(deltaAngels: [String: Double]) {
-        var x = deltaAngels[K.deltaAzimuthValueKey] ?? 0.0
-        var y = deltaAngels[K.deltaElevationValueKey] ?? 0.0
-        let r = sqrt(x * x + y * y)
-        x = x * radius / r
-        y = y * radius / r
-        arrowXConstraint.constant = x
-        arrowYConstraint.constant = -y
-        updateArrowDirection(to: CGPoint(x: x, y: -y))
+        let x = deltaAngels[K.deltaAzimuthValueKey] ?? 0.0
+        let y = deltaAngels[K.deltaElevationValueKey] ?? 0.0
+        let pitchAngle = -(deltaAngels[K.pitchAngleValueKey] ?? 0.0)
+        
+        let xT = x * cos(pitchAngle) - y * sin(pitchAngle)
+        let yT = x * sin(pitchAngle) + y * cos(pitchAngle)
+        
+        let r = sqrt(xT * xT + yT * yT)
+        let xR = xT * radius / r   
+        let yR = yT * radius / r
+                
+        arrowXConstraint.constant = xR
+        arrowYConstraint.constant = -yR
+        updateArrowDirection(to: CGPoint(x: xR, y: -yR))
     }
     
     func changeArrowVisibility(to visibility: Visibility) {

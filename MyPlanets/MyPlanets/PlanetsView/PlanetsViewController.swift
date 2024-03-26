@@ -5,6 +5,7 @@
 //  Created by Tomasz Rygula on 30/01/2024.
 //
 import UIKit
+import CoreLocation
 
 class PlanetsViewController: UIViewController {
     let scrollView = UIScrollView()
@@ -14,11 +15,13 @@ class PlanetsViewController: UIViewController {
     let tileSpacing: CGFloat = 24.0
     var tiles: [PlanetTileView] = []
     let planets = Planets.all
+    let locationManager = CLLocationManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupScrollView()
         addTilesToScrollView()
+        initiateLocationManager()
     }
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
@@ -96,6 +99,57 @@ extension PlanetsViewController: PlanetTileViewDelegate {
         motionTrackingVC.planetData = planetData
 //        let motionTrackingVC = PushViewController()
         navigationController?.pushViewController(motionTrackingVC, animated: false)
+    }
+}
+
+//MARK: - CLLocationManagerDelegate
+
+extension PlanetsViewController: CLLocationManagerDelegate {
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let sharedLocation = SharedLocation.values
+        if let location = locations.first {
+            sharedLocation.updateSharedLocation(location: location)
+            print("Got location data: latitude = \(sharedLocation.latitude), longitude = \(sharedLocation.longitude), height = \(sharedLocation.height), timestamp = \(sharedLocation.locationDate)")
+            print("Current time = \(Date())")
+//            initiatePlanetDataManager()
+        }
+        //TODO: a co jeśli nie dostałem lokalizacji? Czy to jest w ogóle możliwe?
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Error fetching location: \(error.localizedDescription)")
+    }
+    
+    func initiateLocationManager() {
+        locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startMonitoringSignificantLocationChanges()
+    }
+    
+    // CLLocationManagerDelegate methods
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+      switch manager.authorizationStatus {
+      case .authorizedWhenInUse, .authorizedAlways:
+        locationManager.startMonitoringSignificantLocationChanges()
+      case .denied, .restricted:
+        // Handle the case where location authorization is denied or restricted
+          print("Error fetching location: \(CLError(.locationUnknown))")
+      case .notDetermined:
+        // Authorization request in progress
+        break
+      default:
+          print("Error fetching location: \(CLError(.locationUnknown))")
+      }
+    }
+}
+
+//MARK: View state management
+extension PlanetsViewController {
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        print("I will disappear and kill location manager")
+        locationManager.stopMonitoringSignificantLocationChanges()
     }
 }
 

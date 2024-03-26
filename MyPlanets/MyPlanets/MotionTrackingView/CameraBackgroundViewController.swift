@@ -28,9 +28,9 @@ class CameraBackgroundViewController: UIViewController {
 
     }
     
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .landscapeRight // or any other specific orientation you want to support
-    }
+//    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+//        return .landscapeRight // or any other specific orientation you want to support
+//    }
 
     @objc func toggleButtonClicked() {
         let cameraOn = toggleCamera()
@@ -100,7 +100,7 @@ class CameraBackgroundViewController: UIViewController {
                 // Start the session
                 DispatchQueue.global().async {
                     session.startRunning()
-                    print("session started bum bum")
+                    print("session started in async")
                 }
                 view.backgroundColor = .clear
                 return true
@@ -151,7 +151,7 @@ class CameraBackgroundViewController: UIViewController {
     }
 }
 
-//MARK: Orientation change code
+//MARK: Orientation change code - not needed when orientation fixed
 
 extension CameraBackgroundViewController {
     // Handle device orientation changes
@@ -159,7 +159,6 @@ extension CameraBackgroundViewController {
         guard let connection =  self.previewLayer?.connection else { return }
         let currentDevice: UIDevice = UIDevice.current
         let orientation: UIDeviceOrientation = currentDevice.orientation
-        
         guard let previewLayer = self.previewLayer else { return }
         
         if connection.isVideoOrientationSupported {
@@ -171,8 +170,7 @@ extension CameraBackgroundViewController {
                 connection.videoOrientation = .landscapeRight
                 previewLayer.frame = view.layer.bounds
             default:
-                connection.videoOrientation = .landscapeRight
-                previewLayer.frame = view.layer.bounds
+                break          
             }
         }
     }
