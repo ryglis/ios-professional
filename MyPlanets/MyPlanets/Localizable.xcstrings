@@ -121,6 +121,23 @@
         }
       }
     },
+    "localisationUsageDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We need your position to tell you where the planets are"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Potrzebujemy twojej lokalizacji żeby pokazać Ci gdzie są planety"
+          }
+        }
+      }
+    },
     "longitudeLabel" : {
       "extractionState" : "manual",
       "localizations" : {

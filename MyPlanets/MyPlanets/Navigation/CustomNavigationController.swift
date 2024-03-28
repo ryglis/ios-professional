@@ -15,7 +15,7 @@ class CustomNavigationController: UINavigationController {
             // Return supported orientations based on the topmost view controller
             if topViewController is PlanetsViewController {
                 return .portrait // Set orientation for FirstViewController
-            } else if topViewController is MotionTrackingViewController {
+            } else if topViewController is SkyViewController {
                 return .landscape // Set orientation for SecondViewController
             }
         }

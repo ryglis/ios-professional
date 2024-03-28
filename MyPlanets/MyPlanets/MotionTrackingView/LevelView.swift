@@ -46,12 +46,15 @@ class LevelView: UIView {
         NSLayoutConstraint.activate([
             // Motion stack view constraints
             levelLabel.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 2),
-            levelLabel.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 2),
-            levelView.topAnchor.constraint(equalToSystemSpacingBelow: levelLabel.topAnchor, multiplier: 3),
-//            levelView.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 2),
+            levelView.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 2),
+            levelLabel.topAnchor.constraint(equalToSystemSpacingBelow: levelView.bottomAnchor, multiplier: 1),
+            bottomAnchor.constraint(equalToSystemSpacingBelow: levelLabel.bottomAnchor, multiplier: 2),
+            
+            
+//            levelLabel.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 2),
+//            levelView.topAnchor.constraint(equalToSystemSpacingBelow: levelLabel.bottomAnchor, multiplier: 1),
             trailingAnchor.constraint(equalToSystemSpacingAfter: levelLabel.trailingAnchor, multiplier: 2),
-//            trailingAnchor.constraint(equalToSystemSpacingAfter: levelView.trailingAnchor, multiplier: 2),
-            bottomAnchor.constraint(equalToSystemSpacingBelow: levelView.bottomAnchor, multiplier: 2),
+//            bottomAnchor.constraint(equalToSystemSpacingBelow: levelView.bottomAnchor, multiplier: 2),
             levelView.centerXAnchor.constraint(equalTo: centerXAnchor),
         ])
     }

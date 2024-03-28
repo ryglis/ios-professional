@@ -10,19 +10,24 @@ import UIKit
 struct K {
     static let radToDeg = 180.0 / .pi
     
-    //names of localized labels keys
+    //names of localized labels keys for motion data
     static let rollLabelKey = "rollLabel"
     static let pitchLabelKey = "pitchLabel"
     static let yawLabelKey = "yawLabel"
+    static let headingLabelKey = "headingLabel"
+    static let orientationLabelKey = "orientationLabel"
     static let elevationLabelKey = "elevationLabel"
     static let azimuthLabelKey = "azimuthLabel"
-    static let headingLabelKey = "headingLabel"
+    
+    //names of localizied labels keys for planet data
     static let planetElevationLabelKey = "planetElevationLabel"
     static let planetAzimuthLabelKey = "planetAzimuthLabel"
-    static let orientationLabelKey = "orientationLabel"
+    
+    //names of localized labels keys for location
     static let latitudeLabelKey = "latitudeLabel"
     static let longitudeLabelKey = "longitudeLabel"
     
+    //keys of motion data
     static let rollValueKey = "roll"
     static let pitchValueKey = "pitch"
     static let yawValueKey = "yaw"
@@ -47,8 +52,47 @@ struct K {
     static let tealBlue = UIColor(red: 0x00/255.0, green: 0xC6/255.0, blue: 0xC1/255.0, alpha: 1.0)
     static let lightCream = UIColor(red: 0xFF/255.0, green: 0xF7/255.0, blue: 0xD6/255.0, alpha: 1.0)
     
+    //NASA API Parsing
+    static let tableTextLineLenght = 84
+    //Date
+    static let dateStartIndex = 1
+    static let dateLength = 11
+    //RA
+    static let rightAscStartIndex = 23
+    static let rightAscLenght = 12
+    static let rightAscHourOffset = 2
+    static let rightAscMinuteStartIndex = 3
+    static let rightAscMinuteOffset = 2
+    static let rightAscSecondsStartIndex = 6
+    static let rightAscSecondsOffset = 5
+    //DEC
+    static let declinationStartIndex = 35
+    static let declinationLenght = 12
+    static let declinationHourOffset = 3
+    static let declinationMinuteStartIndex = 4
+    static let declinationMinuteOffset = 2
+    static let declinationSecondsStartIndex = 7
+    static let declinationSecondsOffset = 4
+    //Azimuth
+    static let azimuthStartIndex = 48
+    static let azimuthLenght = 10
+    //Elevation
+    static let elevationStartIndex = 59
+    static let elevationLenght = 10
+    //Apparent Sidereal Time
+    static let astStartIndex = 71     //no length because we cut till the end of the line
+    static let astHourOffset = 2
+    static let astMinuteStartIndex = 3
+    static let astMinuteOffset = 2
+    static let astSecondsStartIndex = 6
+    static let astSecondsOffset = 5
+    
+    static let minutesInHour = 60.0
+    static let secondsInHour = 3600.0
+    
     static func roundDouble(doubleToRound: Double) -> Double {
         let roundedDouble = Double(round(1000 * doubleToRound) / 1000)
         return roundedDouble
+        
     }
 }

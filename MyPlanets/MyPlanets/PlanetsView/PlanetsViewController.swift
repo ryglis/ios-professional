@@ -16,9 +16,12 @@ class PlanetsViewController: UIViewController {
     var tiles: [PlanetTileView] = []
     let planets = Planets.all
     let locationManager = CLLocationManager()
+    let apiManager = PlanetAPIManager()
+    var alert: UIAlertController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        apiManager.delegate = self
         setupScrollView()
         addTilesToScrollView()
         initiateLocationManager()
@@ -89,16 +92,15 @@ class PlanetsViewController: UIViewController {
 extension PlanetsViewController: PlanetTileViewDelegate {
     
     func didSelectTileView(_ tileView: PlanetTileView) {
-        // Create the planet data dictionary
-        let planetData: [String: Double] = [
-            K.planetElevationValueKey: 15.0,
-            K.planetAzimuthValueKey: 156.0
-            // Add more planet data as needed
-        ]
-        let motionTrackingVC = MotionTrackingViewController()
-        motionTrackingVC.planetData = planetData
-//        let motionTrackingVC = PushViewController()
-        navigationController?.pushViewController(motionTrackingVC, animated: false)
+        if let index = tiles.firstIndex(where: { $0 === tileView }) {
+            // Index found, do something with it
+            print("Index of tapped tile:", index)
+            let planet = planets[index]
+            planetSelected(planet: planet)
+        } else {
+            // Tile not found in the array
+            print("Tapped tile not found in the tiles array")
+        }
     }
 }
 
@@ -148,8 +150,71 @@ extension PlanetsViewController: CLLocationManagerDelegate {
 extension PlanetsViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        print("I will disappear and kill location manager")
         locationManager.stopMonitoringSignificantLocationChanges()
     }
 }
 
+//MARK: Planet API extension
+extension PlanetsViewController {
+    // Function called when planet is selected
+    func planetSelected(planet: Planet) {
+        // Create the planet data dictionary
+        alert = showLoadingAlert()
+        //API call
+        apiManager.planet = planet
+        apiManager.fetchPlanetData()
+        
+    }
+    
+    func showLoadingAlert() -> UIAlertController {
+        let alertController = UIAlertController(title: "Proszę czekać", message: "Trwa pobieranie danych...", preferredStyle: .alert)
+        present(alertController, animated: true, completion: nil)
+        return alertController
+    }
+    
+    func showErrorAlert() {
+        let alertController = UIAlertController(title: "Błąd", message: "Nie udało się pobrać danych. Spróbuj ponownie później.", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
+    }
+}
+
+extension PlanetsViewController: PlanetAPIManagerDelegate {
+    func didFetchPlanetData(forPlanet: Planet) {
+        var elevation: Double = 0.0
+        var azimut: Double = 0.0
+        
+        print("Wielki sukces")
+        
+        if let fetchedAzimut = forPlanet.efemerid?.azimut {
+            print("Azymut pozyskany = \(fetchedAzimut)")
+            azimut = fetchedAzimut
+        }
+        
+        if let fetchedElevation = forPlanet.efemerid?.elevation {
+            print("Elewacja pozyskana = \(fetchedElevation)")
+            elevation = fetchedElevation
+        }
+        
+        
+        if let currentAlert = alert {
+            currentAlert.dismiss(animated: true)
+        }
+        let planetData: [String: Double] = [
+            K.planetElevationValueKey: elevation,
+            K.planetAzimuthValueKey: azimut
+            // Add more planet data as needed
+        ]
+        let skyViewCcontroller = SkyViewController()
+        skyViewCcontroller.planetData = planetData
+        self.navigationController?.pushViewController(skyViewCcontroller, animated: false)
+        
+    }
+    
+    func didFailWithError(error: any Error) {
+        print(error)
+    }
+    
+    
+}
