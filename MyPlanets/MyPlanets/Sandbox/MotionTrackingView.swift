@@ -76,15 +76,15 @@ class MotionTrackingView: UIView {
     private func createLabels() {
         labels = [
 //            (K.rollLabelKey, makeLabel(text: String(localized: "rollLabel"))),
-            (K.rollLabelKey, makeLabel(text: String(localized: String.LocalizationValue(K.rollLabelKey)))),
-            (K.pitchLabelKey, makeLabel(text: String(localized: String.LocalizationValue(K.pitchLabelKey)))),
-            (K.yawLabelKey, makeLabel(text: String(localized: String.LocalizationValue(K.yawLabelKey)))),
+//            (K.rollLabelKey, makeLabel(text: String(localized: String.LocalizationValue(K.rollLabelKey)))),
+//            (K.pitchLabelKey, makeLabel(text: String(localized: String.LocalizationValue(K.pitchLabelKey)))),
+//            (K.yawLabelKey, makeLabel(text: String(localized: String.LocalizationValue(K.yawLabelKey)))),
             (K.elevationLabelKey, makeLabel(text: String(localized: String.LocalizationValue(K.elevationLabelKey)))),
             (K.azimuthLabelKey, makeLabel(text: String(localized: String.LocalizationValue(K.azimuthLabelKey)))),
             (K.planetElevationLabelKey, makeLabel(text: String(localized: String.LocalizationValue(K.planetElevationLabelKey)))),
             (K.planetAzimuthLabelKey, makeLabel(text: String(localized: String.LocalizationValue(K.planetAzimuthLabelKey)))),
-            (K.headingLabelKey, makeLabel(text: String(localized: String.LocalizationValue(K.headingLabelKey)))),
-            (K.orientationLabelKey, makeLabel(text: String(localized: String.LocalizationValue(K.orientationLabelKey)))),
+//            (K.headingLabelKey, makeLabel(text: String(localized: String.LocalizationValue(K.headingLabelKey)))),
+//            (K.orientationLabelKey, makeLabel(text: String(localized: String.LocalizationValue(K.orientationLabelKey)))),
             (K.latitudeLabelKey, makeLabel(text: String(localized: String.LocalizationValue(K.latitudeLabelKey)))),
             (K.longitudeLabelKey, makeLabel(text: String(localized: String.LocalizationValue(K.longitudeLabelKey)))),
         ]

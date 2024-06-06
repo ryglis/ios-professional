@@ -12,13 +12,13 @@
 		2B2C0D612BA37BDF00014D46 /* PushViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2C0D602BA37BDF00014D46 /* PushViewController.swift */; };
 		2B2C0D642BA39DDA00014D46 /* CustomNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2C0D632BA39DDA00014D46 /* CustomNavigationController.swift */; };
 		2B4985BC2B978D8D00B752A5 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 2B4985BB2B978D8D00B752A5 /* Localizable.xcstrings */; };
+		2B50F2562BC08D6C002AB2EC /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2B50F2552BC08D6C002AB2EC /* Launch Screen.storyboard */; };
 		2B639E3E2B8AA31A00752F15 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B639E3D2B8AA31A00752F15 /* Constants.swift */; };
 		2B72F8D02B8E76AD00FB435E /* PlanetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B72F8CF2B8E76AD00FB435E /* PlanetView.swift */; };
 		2B9213B52B828FD500012ABA /* LevelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B9213B42B828FD500012ABA /* LevelView.swift */; };
 		2B9213B72B82AC3400012ABA /* ScopeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B9213B62B82AC3400012ABA /* ScopeView.swift */; };
 		2B93D7232B697D4A004C4058 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B93D7222B697D4A004C4058 /* AppDelegate.swift */; };
 		2B93D72C2B697D4D004C4058 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2B93D72B2B697D4D004C4058 /* Assets.xcassets */; };
-		2B93D72F2B697D4D004C4058 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2B93D72D2B697D4D004C4058 /* LaunchScreen.storyboard */; };
 		2B93D73F2B69A2D2004C4058 /* PlanetTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B93D73E2B69A2D2004C4058 /* PlanetTileView.swift */; };
 		2B93D7412B69A409004C4058 /* PlanetsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B93D7402B69A409004C4058 /* PlanetsViewController.swift */; };
 		2B994A1A2BB5F0ED00FA8717 /* PlanetAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B994A192BB5F0ED00FA8717 /* PlanetAPIManager.swift */; };
@@ -38,6 +38,7 @@
 		2B2C0D602BA37BDF00014D46 /* PushViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushViewController.swift; sourceTree = "<group>"; };
 		2B2C0D632BA39DDA00014D46 /* CustomNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationController.swift; sourceTree = "<group>"; };
 		2B4985BB2B978D8D00B752A5 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		2B50F2552BC08D6C002AB2EC /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		2B639E3D2B8AA31A00752F15 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		2B72F8CF2B8E76AD00FB435E /* PlanetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetView.swift; sourceTree = "<group>"; };
 		2B9213B42B828FD500012ABA /* LevelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelView.swift; sourceTree = "<group>"; };
@@ -45,7 +46,6 @@
 		2B93D71F2B697D4A004C4058 /* MyPlanets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyPlanets.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B93D7222B697D4A004C4058 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2B93D72B2B697D4D004C4058 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		2B93D72E2B697D4D004C4058 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2B93D7302B697D4D004C4058 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2B93D73E2B69A2D2004C4058 /* PlanetTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetTileView.swift; sourceTree = "<group>"; };
 		2B93D7402B69A409004C4058 /* PlanetsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetsViewController.swift; sourceTree = "<group>"; };
@@ -82,6 +82,7 @@
 		2B93D7162B697D4A004C4058 = {
 			isa = PBXGroup;
 			children = (
+				2B50F2552BC08D6C002AB2EC /* Launch Screen.storyboard */,
 				2B93D7212B697D4A004C4058 /* MyPlanets */,
 				2B93D7202B697D4A004C4058 /* Products */,
 			);
@@ -107,7 +108,6 @@
 				2B93D7222B697D4A004C4058 /* AppDelegate.swift */,
 				2B4985BB2B978D8D00B752A5 /* Localizable.xcstrings */,
 				2B93D72B2B697D4D004C4058 /* Assets.xcassets */,
-				2B93D72D2B697D4D004C4058 /* LaunchScreen.storyboard */,
 				2B93D7302B697D4D004C4058 /* Info.plist */,
 				2B639E3D2B8AA31A00752F15 /* Constants.swift */,
 			);
@@ -225,7 +225,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2B93D72F2B697D4D004C4058 /* LaunchScreen.storyboard in Resources */,
+				2B50F2562BC08D6C002AB2EC /* Launch Screen.storyboard in Resources */,
 				2B93D72C2B697D4D004C4058 /* Assets.xcassets in Resources */,
 				2B4985BC2B978D8D00B752A5 /* Localizable.xcstrings in Resources */,
 			);
@@ -262,17 +262,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		2B93D72D2B697D4D004C4058 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				2B93D72E2B697D4D004C4058 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		2B93D7312B697D4D004C4058 /* Debug */ = {

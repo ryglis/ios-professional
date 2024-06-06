@@ -11,11 +11,6 @@ struct K {
     static let radToDeg = 180.0 / .pi
     
     //names of localized labels keys for motion data
-    static let rollLabelKey = "rollLabel"
-    static let pitchLabelKey = "pitchLabel"
-    static let yawLabelKey = "yawLabel"
-    static let headingLabelKey = "headingLabel"
-    static let orientationLabelKey = "orientationLabel"
     static let elevationLabelKey = "elevationLabel"
     static let azimuthLabelKey = "azimuthLabel"
     
@@ -31,14 +26,16 @@ struct K {
     static let rollValueKey = "roll"
     static let pitchValueKey = "pitch"
     static let yawValueKey = "yaw"
+    //calculated
     static let elevationValueKey = "elevation"
     static let azimuthValueKey = "azimuth"
-    static let headingValueKey = "heading"
-    static let planetElevationValueKey = "planetElevation"
-    static let planetAzimuthValueKey = "planetAzimuth"
     static let deltaElevationValueKey = "deltaElevation"
     static let deltaAzimuthValueKey = "deltaAzimuth"
     static let pitchAngleValueKey = "pitchAngle"
+    //keys of planet data
+    static let planetElevationValueKey = "planetElevation"
+    static let planetAzimuthValueKey = "planetAzimuth"
+
     
     // https://mycolor.space/?hex=%23090E26&sub=1
     static let backbgroundcolor = UIColor(red: 9/255.0, green: 14/255.0, blue: 38/255.0, alpha: 1.0)
@@ -96,3 +93,19 @@ struct K {
         
     }
 }
+
+/*
+ Legacy:
+ static let headingLabelKey = "headingLabel"
+ static let orientationLabelKey = "orientationLabel"
+ static let rollLabelKey = "rollLabel"
+ static let pitchLabelKey = "pitchLabel"
+ static let yawLabelKey = "yawLabel"
+ 
+ 
+
+ static let headingValueKey = "heading"
+ 
+ 
+
+ */

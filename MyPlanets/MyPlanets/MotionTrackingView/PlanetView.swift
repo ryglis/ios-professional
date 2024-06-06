@@ -74,6 +74,10 @@ class PlanetView: UIView {
         planetYConstraint.constant = -yT
     }
     
+    func updatePlanetName(planetName: String) {
+        planetLabel.text = planetName
+    }
+    
     func planetOnScreen() -> Bool {
         let width = UIScreen.main.bounds.width
         let height =  UIScreen.main.bounds.height

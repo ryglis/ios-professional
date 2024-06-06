@@ -11,15 +11,16 @@ import CoreLocation
 
 class SkyViewController: UIViewController {
     let motionManager = CMMotionManager()
-    let locationManager = CLLocationManager()
+//    let locationManager = CLLocationManager()
 //    let dataView = MotionTrackingView()
     let dataView = TrackingDataView()
     let levelView = LevelView()
     let scopeView = ScopeView()
     let levelErrorView = LevelErrorView()
     let planetView = PlanetView()
-    var planetData: [String: Double]?
-//    var planetData: [String: Double] = [K.planetElevationValueKey: 15.0, K.planetAzimuthValueKey: 156.0]
+    var planet: Planet?
+
+    var planetData: [String: Double] = [K.planetElevationValueKey: 0.0, K.planetAzimuthValueKey: 0.0]
     var trackingData = [String: Double]()
     var deltaAngels: [String: Double] = [K.deltaElevationValueKey: 0, K.deltaAzimuthValueKey: 0, K.pitchAngleValueKey: 0]
     let cameraViewController = CameraBackgroundViewController()
@@ -31,7 +32,7 @@ class SkyViewController: UIViewController {
         
         setupView()
         setupMotionManager()
-        setupLocationManager()
+//        setupLocationManager()
         updateErrorViewForOrientation()
         
         // Listen for device orientation changes
@@ -72,6 +73,7 @@ class SkyViewController: UIViewController {
         
         planetView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(planetView)
+        updatePlanetName()
         
         levelErrorView.translatesAutoresizingMaskIntoConstraints = false
         levelErrorView.transform = CGAffineTransform(rotationAngle: CGFloat.pi / (-2))
@@ -82,27 +84,28 @@ class SkyViewController: UIViewController {
     }
     
     private func updatePlanetLabels() {
-        guard let planetData = planetData else {
-            planetData = [K.planetElevationValueKey: 0.0, K.planetAzimuthValueKey: 0.0]
-            return
+        var elevation: Double = 0.0
+        var azimut: Double = 0.0
+        if let fetchedAzimut = planet?.efemerid?.azimut {
+            print("Azymut pozyskany = \(fetchedAzimut)")
+            azimut = fetchedAzimut
         }
-        if let elevationValue = planetData[K.planetElevationValueKey] {
-            dataView.updateLabel(updatedLabel: (K.planetElevationLabelKey, elevationValue))
-            print(K.planetElevationLabelKey, elevationValue)
-        } else {
-            // Handle the case where the key is not found in planetData
-            print("Planet elevation value not found")
+        if let fetchedElevation = planet?.efemerid?.elevation {
+            print("Elewacja pozyskana = \(fetchedElevation)")
+            elevation = fetchedElevation
         }
-        if let azimuthValue = planetData[K.planetAzimuthValueKey] {
-            dataView.updateLabel(updatedLabel: (K.planetAzimuthLabelKey, azimuthValue))
-            print(K.planetAzimuthLabelKey, azimuthValue)
-        } else {
-            // Handle the case where the key is not found in planetData
-            print("Planet azimuth value not found")
+        planetData = [K.planetElevationValueKey: elevation, K.planetAzimuthValueKey: azimut]
+
+        dataView.updateLabel(updatedLabel: (K.planetElevationLabelKey, elevation))
+        print(K.planetElevationLabelKey, elevation)
+        dataView.updateLabel(updatedLabel: (K.planetAzimuthLabelKey, azimut))
+        print(K.planetAzimuthLabelKey, azimut)
+    }
+    
+    private func updatePlanetName() {
+        if let planetName = planet?.name {
+            planetView.updatePlanetName(planetName: planetName)
         }
-        let sharedLocation = SharedLocation.values
-        dataView.updateLabel(updatedLabel: (K.latitudeLabelKey, sharedLocation.latitude))
-        dataView.updateLabel(updatedLabel: (K.longitudeLabelKey, sharedLocation.longitude))
     }
     
     private func updateLocationLabels() {
@@ -211,15 +214,15 @@ extension SkyViewController {
     }
     
     private func updateMotionLabels() {
-        if let roll = trackingData[K.rollValueKey] {
-            dataView.updateLabel(updatedLabel: (K.rollLabelKey, roll))
-        }
-        if let pitch = trackingData[K.pitchValueKey] {
-            dataView.updateLabel(updatedLabel: (K.pitchLabelKey, pitch))
-        }
-        if let yaw = trackingData[K.yawValueKey] {
-            dataView.updateLabel(updatedLabel: (K.yawLabelKey, yaw))
-        }
+//        if let roll = trackingData[K.rollValueKey] {
+//            dataView.updateLabel(updatedLabel: (K.rollLabelKey, roll))
+//        }
+//        if let pitch = trackingData[K.pitchValueKey] {
+//            dataView.updateLabel(updatedLabel: (K.pitchLabelKey, pitch))
+//        }
+//        if let yaw = trackingData[K.yawValueKey] {
+//            dataView.updateLabel(updatedLabel: (K.yawLabelKey, yaw))
+//        }
         if let elevation = trackingData[K.elevationValueKey] {
             dataView.updateLabel(updatedLabel: (K.elevationLabelKey, elevation))
         }
@@ -234,10 +237,6 @@ extension SkyViewController {
     }
     
     private func updateDeltaAngels() {
-        guard let planetData = planetData else {
-            planetData = [K.planetElevationValueKey: 0.0, K.planetAzimuthValueKey: 0.0]
-            return
-        }
         var deltaElevation = 0.0
         var deltaAzimuth = 0.0
         if let phoneElevation = trackingData[K.elevationValueKey], let planetElevation = planetData[K.planetElevationValueKey] {
@@ -276,41 +275,41 @@ extension SkyViewController {
     }
 }
 
-//MARK: Heading update
-extension SkyViewController: CLLocationManagerDelegate {
-    private func setupLocationManager() {
-        locationManager.delegate = self
-        locationManager.startUpdatingHeading()
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
-        updateHeadingLabel(newHeading)
-    }
-    
-    private func updateHeadingLabel(_ heading: CLHeading) {
-        dataView.updateLabel(updatedLabel: (K.headingLabelKey, heading.trueHeading))
-    }
-    
-    func stopHeadingUpdatesIfNeeded() {
-        DispatchQueue.global().async {
-            if CLLocationManager.locationServicesEnabled() {
-                DispatchQueue.main.async {
-                    switch self.locationManager.authorizationStatus {
-                    case .authorizedAlways, .authorizedWhenInUse:
-                        self.locationManager.stopUpdatingHeading() // Stop updating heading
-                    default:
-                        break // Do nothing if not authorized
-                    }
-                }
-            }
-        }
-    }
-    
-    // CLLocationManagerDelegate method to handle authorization changes
-    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        stopHeadingUpdatesIfNeeded()
-    }
-}
+////MARK: Heading update
+//extension SkyViewController: CLLocationManagerDelegate {
+//    private func setupLocationManager() {
+//        locationManager.delegate = self
+//        locationManager.startUpdatingHeading()
+//    }
+//    
+//    func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+//        updateHeadingLabel(newHeading)
+//    }
+//    
+//    private func updateHeadingLabel(_ heading: CLHeading) {
+//        dataView.updateLabel(updatedLabel: (K.headingLabelKey, heading.trueHeading))
+//    }
+//    
+//    func stopHeadingUpdatesIfNeeded() {
+//        DispatchQueue.global().async {
+//            if CLLocationManager.locationServicesEnabled() {
+//                DispatchQueue.main.async {
+//                    switch self.locationManager.authorizationStatus {
+//                    case .authorizedAlways, .authorizedWhenInUse:
+//                        self.locationManager.stopUpdatingHeading() // Stop updating heading
+//                    default:
+//                        break // Do nothing if not authorized
+//                    }
+//                }
+//            }
+//        }
+//    }
+//    
+//    // CLLocationManagerDelegate method to handle authorization changes
+//    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+//        stopHeadingUpdatesIfNeeded()
+//    }
+//}
 
 //MARK: Orientation change
 extension SkyViewController {
@@ -375,7 +374,7 @@ extension SkyViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         // Stop motion updates
-        stopHeadingUpdatesIfNeeded()
+//        stopHeadingUpdatesIfNeeded()
         stopMotionUpdatesIfNeeded()
     }
 }

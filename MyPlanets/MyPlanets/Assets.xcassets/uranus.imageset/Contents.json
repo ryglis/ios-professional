@@ -1,15 +1,17 @@
 {
   "images" : [
     {
+      "filename" : "nasa-Li41RApUAQA-unsplash (2).jpg",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "nasa-Li41RApUAQA-unsplash (1).jpg",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "uran.jpeg",
+      "filename" : "nasa-Li41RApUAQA-unsplash.jpg",
       "idiom" : "universal",
       "scale" : "3x"
     }

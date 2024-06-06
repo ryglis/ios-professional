@@ -7,11 +7,12 @@
 import UIKit
 import CoreLocation
 
+//TODO: Photo by <a href="https://unsplash.com/@nasa?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">NASA</a> on <a href="https://unsplash.com/photos/uranus-planet-Li41RApUAQA?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
+
+
 class PlanetsViewController: UIViewController {
     let scrollView = UIScrollView()
-//    let tileWidth: CGFloat = 100.0
     let tileWidthPercentage: CGFloat = 0.9 // 90% of the screen width
-//    let tileHeight: CGFloat = 150.0
     let tileSpacing: CGFloat = 24.0
     var tiles: [PlanetTileView] = []
     let planets = Planets.all
@@ -38,8 +39,6 @@ class PlanetsViewController: UIViewController {
     
     private func setupScrollView() {
         view.backgroundColor = K.backbgroundcolor
-//        scrollView.frame = view.bounds
-//        scrollView.contentSize = CGSize(width: view.bounds.width, height: CGFloat(numberOfTiles) * (tileHeight + tileSpacing))
         let safeArea = view.safeAreaLayoutGuide
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(scrollView)
@@ -57,7 +56,6 @@ class PlanetsViewController: UIViewController {
 //        var yOffset: CGFloat = 0.0
         let screenWidth = view.bounds.width
         let tileWidth = screenWidth * tileWidthPercentage
-        var totalTileHeight: CGFloat = 0.0
         let numberOfTiles = planets.count
         
         for index in 0..<numberOfTiles {
@@ -70,14 +68,18 @@ class PlanetsViewController: UIViewController {
             scrollView.addSubview(tileView)
             tiles.append(tileView)
             
+//             Calculate the desired height of the image based on its aspect ratio
+            guard let image = tileView.imageView.image else { continue }
+            let imageAspectRatio = image.size.width / image.size.height
+            let imageHeight = tileWidth / imageAspectRatio
+            
             // Add constraints for each tile
             NSLayoutConstraint.activate([
                 tileView.widthAnchor.constraint(equalToConstant: tileWidth),
+                tileView.imageView.heightAnchor.constraint(equalToConstant: imageHeight), // Set the height of the image view
                 tileView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: (screenWidth - tileWidth) / 2),
                 tileView.topAnchor.constraint(equalTo: index == 0 ? scrollView.topAnchor : tiles[index - 1].bottomAnchor, constant: tileSpacing)
             ])
-            // Update totalTileHeight
-            totalTileHeight += tileView.systemLayoutSizeFitting(CGSize(width: tileWidth, height: UIView.layoutFittingCompressedSize.height)).height
             
             // Add the bottom anchor constraint for the last tile
             if index == numberOfTiles - 1 {
@@ -180,34 +182,18 @@ extension PlanetsViewController {
     }
 }
 
+//MARK: Planet API Manager delegate
 extension PlanetsViewController: PlanetAPIManagerDelegate {
     func didFetchPlanetData(forPlanet: Planet) {
-        var elevation: Double = 0.0
-        var azimut: Double = 0.0
         
         print("Wielki sukces")
-        
-        if let fetchedAzimut = forPlanet.efemerid?.azimut {
-            print("Azymut pozyskany = \(fetchedAzimut)")
-            azimut = fetchedAzimut
-        }
-        
-        if let fetchedElevation = forPlanet.efemerid?.elevation {
-            print("Elewacja pozyskana = \(fetchedElevation)")
-            elevation = fetchedElevation
-        }
-        
         
         if let currentAlert = alert {
             currentAlert.dismiss(animated: true)
         }
-        let planetData: [String: Double] = [
-            K.planetElevationValueKey: elevation,
-            K.planetAzimuthValueKey: azimut
-            // Add more planet data as needed
-        ]
+
         let skyViewCcontroller = SkyViewController()
-        skyViewCcontroller.planetData = planetData
+        skyViewCcontroller.planet = forPlanet
         self.navigationController?.pushViewController(skyViewCcontroller, animated: false)
         
     }
